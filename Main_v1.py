@@ -12,12 +12,20 @@ from new_coal_dialog import Ui_new_coal_dialog
 from mine_info_dialog import Ui_mine_info_dialog
 from index_trend_dialog import Ui_index_trend_dialog
 
-#################### Templete ################################
+
 ### 导入数据的窗口界面 ###
 class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
     def __init__(self):
         super(Import_Window, self).__init__()
         self.setupUi(self)
+
+    def find_files(self):
+        fileName, filetype = QtWidgets.QFileDialog.getOpenFileNames(self, "浏览选取煤种数据文件", "./")
+        self.textEdit.setText('')
+        self.textEdit.append('计划读取以下数据文件:')
+        for item in fileName:
+            self.textEdit.append(item)
+
 
 ### 数据库程序的主界面 ###
 class Main_Window(QtWidgets.QMainWindow,Ui_MainWindow):
