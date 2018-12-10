@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>coal_index_dialog</class>
- <widget class="QDialog" name="coal_index_dialog">
+ <class>new_coal_dialog</class>
+ <widget class="QDialog" name="new_coal_dialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>分品种指标库</string>
+   <string>新煤种库</string>
   </property>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
@@ -333,7 +333,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>131</width>
+     <width>201</width>
      <height>31</height>
     </rect>
    </property>
@@ -346,7 +346,7 @@
     </font>
    </property>
    <property name="text">
-    <string>煤种筛选条件</string>
+    <string>新煤种筛选条件</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_9">
@@ -602,7 +602,7 @@
   <connection>
    <sender>screening_btn</sender>
    <signal>clicked()</signal>
-   <receiver>coal_index_dialog</receiver>
+   <receiver>new_coal_dialog</receiver>
    <slot>screening_btn_click()</slot>
    <hints>
     <hint type="sourcelabel">

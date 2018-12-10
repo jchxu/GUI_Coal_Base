@@ -6,10 +6,11 @@ from PyQt5.QtWidgets import QDialog
 from Import_Data import Ui_Import_Window
 from MainWindows import Ui_MainWindow
 from coal_index_dialog import Ui_coal_index_dialog
-#from classic_dialog import Ui_classic_dialog
-#from new_dialog import Ui_new_dialog
-#from mine_dialog import Ui_mine_dialog
-#from trend_dialog import Ui_trend_dialog
+from base_coal_dialog import Ui_base_coal_dialog
+from classic_coal_dialog import Ui_base_coal_dialog
+from new_coal_dialog import Ui_new_coal_dialog
+from mine_info_dialog import Ui_mine_info_dialog
+from index_trend_dialog import Ui_index_trend_dialog
 
 #################### Templete ################################
 ### 导入数据的窗口界面 ###
@@ -24,42 +25,47 @@ class Main_Window(QtWidgets.QMainWindow,Ui_MainWindow):
         super(Main_Window, self).__init__()
         self.setupUi(self)
 
-### 分品种煤质指标数据库窗口 ###
-class Coal_index_Window(QDialog):
+### 分品种煤质指标数据窗口 ###
+class Coal_Index_Window(QDialog):
     def __init__(self):
         QDialog.__init__(self)
         self.child = Ui_coal_index_dialog()
         self.child.setupUi(self)
 
-#class Major_Window(QDialog):
-#    def __init__(self):
-#        QDialog.__init__(self)
-#        self.child = Ui_major_dialog()
-#        self.child.setupUi(self)
-#
-#class Classic_Window(QDialog):
-#    def __init__(self):
-#        QDialog.__init__(self)
-#        self.child = Ui_classic_dialog()
-#        self.child.setupUi(self)
-#
-#class New_Window(QDialog):
-#    def __init__(self):
-#        QDialog.__init__(self)
-#        self.child = Ui_new_dialog()
-#        self.child.setupUi(self)
-#
-#class Mine_Window(QDialog):
-#    def __init__(self):
-#        QDialog.__init__(self)
-#        self.child = Ui_mine_dialog()
-#        self.child.setupUi(self)
-#
-#class Trend_Window(QDialog):
-#    def __init__(self):
-#        QDialog.__init__(self)
-#        self.child = Ui_trend_dialog()
-#        self.child.setupUi(self)
+### 基础煤种指标数据窗口 ###
+class Base_Coal_Window(QDialog):
+    def __init__(self):
+        QDialog.__init__(self)
+        self.child = Ui_base_coal_dialog()
+        self.child.setupUi(self)
+
+### 经典煤种指标数据窗口 ###
+class Classic_Coal_Window(QDialog):
+    def __init__(self):
+        QDialog.__init__(self)
+        self.child = Ui_base_coal_dialog()
+        self.child.setupUi(self)
+
+### 新煤种指标数据窗口 ###
+class New_Coal_Window(QDialog):
+    def __init__(self):
+        QDialog.__init__(self)
+        self.child = Ui_new_coal_dialog()
+        self.child.setupUi(self)
+
+### 煤矿/矿山信息窗口 ###
+class Mine_Info_Window(QDialog):
+    def __init__(self):
+        QDialog.__init__(self)
+        self.child = Ui_mine_info_dialog()
+        self.child.setupUi(self)
+
+### 煤种指标质量变化趋势窗口 ###
+class Index_Trend_Window(QDialog):
+    def __init__(self):
+        QDialog.__init__(self)
+        self.child = Ui_index_trend_dialog()
+        self.child.setupUi(self)
 
 
     ######## Slot functions #############
@@ -79,19 +85,18 @@ if __name__ == "__main__":
 
     ImportWindow = Import_Window()
     MainWindow = Main_Window()
-    CoalIndexWindow = Coal_index_Window()
-    #BaseWindow = Base_Window()
-    #ClassicWindow = Classic_Window()
-    #NewWindow = New_Window()
-    #MineWindow = Mine_Window()
-    #TrendWindow = Trend_Window()
+    CoalIndexWindow = Coal_Index_Window()
+    BaseCoalWindow = Base_Coal_Window()
+    ClassicCoalWindow = Classic_Coal_Window()
+    NewCoalWindow = New_Coal_Window()
+    MineInfoWindow = Mine_Info_Window()
+    IndexTrendWindow = Index_Trend_Window()
     MainWindow.coal_index.clicked.connect(CoalIndexWindow.show)
-    #MainWindow.minor_lib.clicked.connect(MinorWindow.show)
-    #MainWindow.base_coal.clicked.connect(BaseWindow.show)
-    #MainWindow.classic_coal.clicked.connect(ClassicWindow.show)
-    #MainWindow.new_coal.clicked.connect(NewWindow.show)
-    #MainWindow.mine_info.clicked.connect(MineWindow.show)
-    #MainWindow.trend.clicked.connect(TrendWindow.show)
+    MainWindow.base_coal.clicked.connect(BaseCoalWindow.show)
+    MainWindow.classic_coal.clicked.connect(ClassicCoalWindow.show)
+    MainWindow.new_coal.clicked.connect(NewCoalWindow.show)
+    MainWindow.mine_info.clicked.connect(MineInfoWindow.show)
+    MainWindow.index_trend.clicked.connect(IndexTrendWindow.show)
 
     ImportWindow.show()
     ImportWindow.Open_Main.clicked.connect(MainWindow.show)

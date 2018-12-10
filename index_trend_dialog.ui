@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>coal_index_dialog</class>
- <widget class="QDialog" name="coal_index_dialog">
+ <class>index_trend_dialog</class>
+ <widget class="QDialog" name="index_trend_dialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,34 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>分品种指标库</string>
+   <string>煤种质量变化趋势</string>
   </property>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>60</y>
-     <width>41</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>新宋体</family>
-     <pointsize>14</pointsize>
-     <weight>50</weight>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>产地</string>
-   </property>
-  </widget>
   <widget class="QComboBox" name="comboBox_3">
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>160</y>
+     <y>100</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -99,7 +78,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>260</y>
+     <y>200</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -120,7 +99,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>360</y>
+     <y>300</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -162,32 +141,11 @@
     </property>
    </item>
   </widget>
-  <widget class="QPushButton" name="screening_btn">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>460</y>
-     <width>170</width>
-     <height>50</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>新宋体</family>
-     <pointsize>14</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>筛选</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>110</y>
+     <y>50</y>
      <width>41</width>
      <height>31</height>
     </rect>
@@ -208,7 +166,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>360</y>
+     <y>300</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -229,7 +187,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>310</y>
+     <y>250</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -250,7 +208,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>260</y>
+     <y>200</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -286,7 +244,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>410</y>
+     <y>350</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -333,7 +291,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>131</width>
+     <width>201</width>
      <height>31</height>
     </rect>
    </property>
@@ -353,7 +311,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>410</y>
+     <y>350</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -374,7 +332,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>310</y>
+     <y>250</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -420,7 +378,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>110</y>
+     <y>50</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -462,62 +420,11 @@
     </property>
    </item>
   </widget>
-  <widget class="QComboBox" name="comboBox">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>60</y>
-     <width>120</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>新宋体</family>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-   <item>
-    <property name="text">
-     <string>所有</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>国内</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>国外</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>中国，山西</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>中国，华东</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>中国，其他</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>巴西</string>
-    </property>
-   </item>
-  </widget>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>160</y>
+     <y>100</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -538,7 +445,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>210</y>
+     <y>150</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -559,7 +466,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>210</y>
+     <y>150</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -598,24 +505,7 @@
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>screening_btn</sender>
-   <signal>clicked()</signal>
-   <receiver>coal_index_dialog</receiver>
-   <slot>screening_btn_click()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>143</x>
-     <y>485</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>242</x>
-     <y>487</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>screening_btn_click()</slot>
  </slots>
