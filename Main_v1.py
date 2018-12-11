@@ -12,8 +12,8 @@ from classic_coal_dialog import Ui_base_coal_dialog     #导入“经典煤种�
 from new_coal_dialog import Ui_new_coal_dialog          #导入“新煤种库”窗口
 from mine_info_dialog import Ui_mine_info_dialog        #导入“煤矿/矿山信息”窗口
 from index_trend_dialog import Ui_index_trend_dialog    #导入“质量变化趋势”窗口
+from Import_Data_Func import *      #导入数据的相关函数
 
-datafile = []
 
 ### 导入数据的窗口界面 ###
 class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
@@ -26,13 +26,19 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
         datafiles, filetype = QtWidgets.QFileDialog.getOpenFileNames(self, "浏览选取煤种数据文件", "./",filter='Excel Files(*.xlsx *.xls);;CSV Files(*.csv)')
         self.textEdit.setText('')
         if len(datafiles) > 0:
+            # 文本框中显示要读取的文件
             self.textEdit.append('此次将读取以下数据文件:')
             for item in datafiles:
                 self.textEdit.append(item)
+            # 读取数据文件
+            self.textEdit.append('开始读取数据文件:')
+            dfs = read_data(datafiles)
+
+
 
     # 重新读取数据，合并保存
-    def reload_files(self):
-        print()
+    #def reload_files(self):
+    #    print()
 
 
 ### 数据库程序的主界面 ###

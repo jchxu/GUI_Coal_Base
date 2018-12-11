@@ -86,7 +86,7 @@
        <x>10</x>
        <y>40</y>
        <width>200</width>
-       <height>32</height>
+       <height>60</height>
       </rect>
      </property>
      <property name="font">
@@ -95,31 +95,42 @@
        <pointsize>14</pointsize>
        <weight>50</weight>
        <bold>false</bold>
+       <strikeout>false</strikeout>
+       <kerning>true</kerning>
       </font>
      </property>
-     <property name="text">
-      <string>1.浏览选择数据文件</string>
+     <property name="contextMenuPolicy">
+      <enum>Qt::DefaultContextMenu</enum>
      </property>
-    </widget>
-    <widget class="QPushButton" name="reload_btn">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>90</y>
-       <width>200</width>
-       <height>32</height>
-      </rect>
+     <property name="acceptDrops">
+      <bool>false</bool>
      </property>
-     <property name="font">
-      <font>
-       <family>新宋体</family>
-       <pointsize>14</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
-      </font>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
      </property>
      <property name="text">
-      <string>2.读取数据文件</string>
+      <string>浏览并选择数据文件</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <property name="autoRepeat">
+      <bool>false</bool>
+     </property>
+     <property name="autoExclusive">
+      <bool>false</bool>
+     </property>
+     <property name="autoRepeatInterval">
+      <number>97</number>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>
@@ -149,7 +160,7 @@
        <x>10</x>
        <y>40</y>
        <width>200</width>
-       <height>32</height>
+       <height>60</height>
       </rect>
      </property>
      <property name="font">
@@ -161,41 +172,41 @@
       </font>
      </property>
      <property name="text">
-      <string>1.浏览选择数据文件</string>
+      <string>浏览并选择数据文件</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="append_btn">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>90</y>
-       <width>200</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>新宋体</family>
-       <pointsize>14</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>2.读取数据文件</string>
-     </property>
-    </widget>
+   </widget>
+   <widget class="QPushButton" name="quit_btn">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>490</y>
+      <width>180</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>新宋体</family>
+      <pointsize>16</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>退出</string>
+    </property>
    </widget>
    <zorder>groupBox</zorder>
    <zorder>textEdit</zorder>
    <zorder>Open_Main</zorder>
    <zorder>groupBox_2</zorder>
+   <zorder>quit_btn</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <tabstops>
   <tabstop>find_files_btn1</tabstop>
-  <tabstop>reload_btn</tabstop>
   <tabstop>textEdit</tabstop>
  </tabstops>
  <resources/>
@@ -249,34 +260,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>reload_btn</sender>
+   <sender>quit_btn</sender>
    <signal>clicked()</signal>
    <receiver>Import_Window</receiver>
-   <slot>reload_files()</slot>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>206</x>
-     <y>141</y>
+     <x>497</x>
+     <y>515</y>
     </hint>
     <hint type="destinationlabel">
-     <x>261</x>
-     <y>150</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>append_btn</sender>
-   <signal>clicked()</signal>
-   <receiver>Import_Window</receiver>
-   <slot>append_files()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>549</x>
-     <y>148</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>666</x>
-     <y>146</y>
+     <x>616</x>
+     <y>520</y>
     </hint>
    </hints>
   </connection>
