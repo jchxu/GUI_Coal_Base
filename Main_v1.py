@@ -1,17 +1,19 @@
 # coding=utf-8
 
 import sys
+import pandas as pd
 from PyQt5 import QtGui,QtCore,QtWidgets
 from PyQt5.QtWidgets import QDialog
-from Import_Data import Ui_Import_Window
-from MainWindows import Ui_MainWindow
-from coal_index_dialog import Ui_coal_index_dialog
-from base_coal_dialog import Ui_base_coal_dialog
-from classic_coal_dialog import Ui_base_coal_dialog
-from new_coal_dialog import Ui_new_coal_dialog
-from mine_info_dialog import Ui_mine_info_dialog
-from index_trend_dialog import Ui_index_trend_dialog
+from Import_Data import Ui_Import_Window    #导入“导入数据”窗口
+from MainWindows import Ui_MainWindow       #导入程序主窗口窗口
+from coal_index_dialog import Ui_coal_index_dialog      #导入“分煤种指标库”窗口
+from base_coal_dialog import Ui_base_coal_dialog        #导入“基础煤种库”窗口
+from classic_coal_dialog import Ui_base_coal_dialog     #导入“经典煤种库”窗口
+from new_coal_dialog import Ui_new_coal_dialog          #导入“新煤种库”窗口
+from mine_info_dialog import Ui_mine_info_dialog        #导入“煤矿/矿山信息”窗口
+from index_trend_dialog import Ui_index_trend_dialog    #导入“质量变化趋势”窗口
 
+datafile = []
 
 ### 导入数据的窗口界面 ###
 class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
@@ -19,12 +21,18 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
         super(Import_Window, self).__init__()
         self.setupUi(self)
 
+    # 打开文件浏览窗口，选择数据文件
     def find_files(self):
-        fileName, filetype = QtWidgets.QFileDialog.getOpenFileNames(self, "浏览选取煤种数据文件", "./")
+        datafiles, filetype = QtWidgets.QFileDialog.getOpenFileNames(self, "浏览选取煤种数据文件", "./",filter='Excel Files(*.xlsx *.xls);;CSV Files(*.csv)')
         self.textEdit.setText('')
-        self.textEdit.append('计划读取以下数据文件:')
-        for item in fileName:
-            self.textEdit.append(item)
+        if len(datafiles) > 0:
+            self.textEdit.append('此次将读取以下数据文件:')
+            for item in datafiles:
+                self.textEdit.append(item)
+
+    # 重新读取数据，合并保存
+    def reload_files(self):
+        print()
 
 
 ### 数据库程序的主界面 ###
@@ -106,8 +114,8 @@ if __name__ == "__main__":
     MainWindow.mine_info.clicked.connect(MineInfoWindow.show)
     MainWindow.index_trend.clicked.connect(IndexTrendWindow.show)
 
-    ImportWindow.show()
-    ImportWindow.Open_Main.clicked.connect(MainWindow.show)
-    ImportWindow.Open_Main.clicked.connect(ImportWindow.close)
-    #MainWindow.show()
+    ImportWindow.show()     #程序启动默认显示“导入数据”窗口
+    ImportWindow.Open_Main.clicked.connect(MainWindow.show)         #打开主窗口
+    ImportWindow.Open_Main.clicked.connect(ImportWindow.close)      #同时，关闭导入数据窗口
+
     sys.exit(app.exec_())
