@@ -30,9 +30,10 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
             self.textEdit.append('此次将读取以下数据文件:')
             for item in datafiles:
                 self.textEdit.append(item)
-            # 读取数据文件
+            # 读取并初始化数据
             self.textEdit.append('开始读取数据文件:')
-            dfs = read_data(datafiles)
+            dfs = read_data(datafiles)  #读取数据文件
+            dfs = init_level(dfs)   #5个指标分级
 
 
 
