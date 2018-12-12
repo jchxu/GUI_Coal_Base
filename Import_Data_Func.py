@@ -59,8 +59,9 @@ def get_S_level(coal_kind,coal_Std):
 def init_level(dfs):
     colnum = len(dfs.index)
     new_indexs = ['煤质分级','热强度分级','硬煤分类','灰分分级','硫分分级']
-    dfs = pd.concat([dfs,pd.DataFrame(columns=new_indexs)],sort=False)
+    dfs = pd.concat([dfs,pd.DataFrame(columns=new_indexs)])#, sort=False)
     for index,row in dfs.iterrows():
         dfs.loc[index,'硫分分级'] = get_S_level(row.煤种,row.Std)
+        dfs.loc[index,'灰分分级'] = get_S_level(row.煤种,row.Ad)
 
     return dfs

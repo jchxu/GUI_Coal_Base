@@ -11,7 +11,7 @@ from Import_Data_Func import *
 
 pd.set_option('display.max_columns', None)
 
-datafiles = ['D:/Documents/PycharmProjects/宝钢/GUI_Coal_Base/原始数据.csv','D:/Documents/PycharmProjects/宝钢/GUI_Coal_Base/原始数据.xls','D:/Documents/PycharmProjects/宝钢/GUI_Coal_Base/原始数据.xlsx']
+datafiles = ['D:/PycharmProjects/宝钢/GUI_Coal_Base/原始数据.csv','D:/PycharmProjects/宝钢/GUI_Coal_Base/原始数据.xls','D:/PycharmProjects/宝钢/GUI_Coal_Base/原始数据.xlsx']
 dfs = read_data(datafiles)
 dfs = init_level(dfs)
 
