@@ -119,12 +119,33 @@ def mean_by_year(dfs):
         if (i != len(year_range)-1):
             year_start = int(year_range[i].split('-')[0])
             year_end = int(year_range[i].split('-')[1])
-            dfs_i = dfs[(dfs.年份 >= year_start) & (dfs.年份 <= year_end)]
-            if len(dfs_i.index) > 0:
-                print(year_range[i])
-                print(dfs_i)
-                print(dfs_i.mean())
-                print(dfs_i.mean()['Ad'])
+            dfs_yearrange = dfs[(dfs.年份 >= year_start) & (dfs.年份 <= year_end)]
+        else:
+            year_start = int(year_range[i][:4])
+            dfs_yearrange = dfs[(dfs.年份 >= year_start)]
+        if len(dfs_yearrange.index) > 0:
+            print(year_range[i])
+            ##print(dfs_yearrange)
+            #names = list(set(dfs_yearrange['煤名称'].tolist()))
+            #cols = dfs_yearrange.columns.tolist()
+            #cols.remove('序号')
+            #cols.remove('煤种')
+            #cols.remove('煤名称')
+            #cols.remove('国家')
+            #cols.remove('产地')
+            #cols.remove('年份')
+            #cols.remove('Pd')
+            ##print(names,cols)
+            #dfs_mean_yearrange = pd.DataFrame(columns=cols,index=names)
+            #dfs_yearrangeGM = dfs_yearrange.groupby('煤名称').mean()
+            ##print(dfs_mean_yearrange.columns.tolist())
+            #print(dfs_yearrangeGM)
+            ##for nameindex in range(len(names)):
+            ##    print(dfs_yearrangeGM.loc[names[nameindex],'Ad'])
+            #for nameindex in range(len(names)):
+            #    for colindex in range(len(cols)):
+            #        dfs_mean_yearrange.loc[nameindex,cols[colindex]] = dfs_yearrangeGM.loc[names[nameindex],cols[colindex]]
+            #print(dfs_mean_yearrange)
 
     return dfs
 
