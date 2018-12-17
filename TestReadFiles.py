@@ -15,6 +15,6 @@ pd.set_option('display.max_columns', None)
 datafiles = ['原始数据.xlsx']
 dfs = read_data(datafiles)
 dfs = mean_by_year(dfs)
-#dfs = init_level(dfs)
+dfs = init_level(dfs)
 
-#print(dfs)
+print(dfs)
