@@ -15,6 +15,7 @@ def report_progress_done():
     sys.stdout.write('\n')
 
 ### 逐个读取excel/csv数据文件
+#def read_data(self,datafiles):
 def read_data(datafiles):
     dflist = []
     for i in range(len(datafiles)):
@@ -126,6 +127,7 @@ def get_Hard_level(coal_Vd,coal_lgMF,coal_TD):
 
 
 ### 根据时间段对数据进行分段平均
+#def mean_by_year(self,dfs):
 def mean_by_year(dfs):
     year_range = ['1985-1990','1991-1995','1996-1998','1999-2002','2003-2005','2006-2010','2011-2015','2016至今']
     cols = dfs.columns.tolist()
@@ -164,14 +166,17 @@ def mean_by_year(dfs):
                     if (names[nameindex] in dfs_yearrangeGM.index) and (col in dfs_yearrangeGM.columns):
                         dfs_mean_yearrange.loc[initnum+nameindex,col] = dfs_yearrangeGM.loc[names[nameindex],col]
     print('已根据年份时间段对各煤种进行指标数据平均')
+    #self.textEdit.append('已根据年份时间段对各煤种进行指标数据平均')
     return dfs_mean_yearrange
 
 ### 根据数据对煤质、热强度、硬煤分类、灰分、硫分进行分级，并插入各自数据中
+#def init_level(self,dfs):
 def init_level(dfs):
     colnum = len(dfs.index)
     new_indexs = ['煤质分级','热强度分级','硬煤分类','灰分分级','硫分分级']
     dfs = pd.concat([dfs,pd.DataFrame(columns=new_indexs)])#, sort=False)
     print('根据各指标进行煤质、热强度、硬煤分类、灰分、硫分分级')
+    #self.textEdit.append('根据各指标进行煤质、热强度、硬煤分类、灰分、硫分分级')
     for index,row in dfs.iterrows():
         dfs.loc[index,'硫分分级'] = get_S_level(row.煤种,row.Std)
         dfs.loc[index,'灰分分级'] = get_Ash_level(row.煤种,row.Ad)

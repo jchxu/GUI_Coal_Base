@@ -32,9 +32,9 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
                 self.textEdit.append(item)
             # 读取并初始化数据
             self.textEdit.append('开始读取数据文件:')
-            dfs = read_data(datafiles)  #读取数据文件
-            dfs = init_level(dfs)   #5个指标分级
-
+            dfs = read_data(self,datafiles)  #读取数据文件
+            dfs = mean_by_year(self,dfs)
+            dfs = init_level(self,dfs)   #5个指标分级
 
 
     # 重新读取数据，合并保存
