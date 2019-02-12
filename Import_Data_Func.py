@@ -124,23 +124,59 @@ def get_HotStrength_level(coal_kind,coal_CSR):
 ### 根据挥发分、基质流动度、全膨胀数据，判断硬煤分类
 def get_Hard_level(coal_Vd,coal_lgMF,coal_TD):
     coal_MF = 10**coal_lgMF
-    if 31 <= coal_Vd < 33:  #硬A档
+    if 30 <= coal_Vd < 33:  #高档硬A
         if (coal_MF >= 15000) and (coal_TD >= 200): return ('硬煤')
         elif (coal_MF >= 15000) or (coal_TD >= 200): return ('半硬优')
         elif (coal_MF < 1000) and (coal_TD < 50): return ('软煤')
         elif (coal_MF < 1000) or (coal_TD < 50): return ('半软')
         else: return ('半硬')
-    elif 33 <= coal_Vd < 36:  #硬B档
+    elif 33 <= coal_Vd < 36:  #高档硬B
         if (10000 <= coal_MF < 15000) and (175 <= coal_TD < 200): return ('硬煤')
         elif (10000 <= coal_MF < 15000) or (175 <= coal_TD < 200): return ('半硬优')
         elif (coal_MF < 1000) and (coal_TD < 50): return ('软煤')
         elif (coal_MF < 1000) or (coal_TD < 50): return ('半软')
         else: return ('半硬')
-    elif 36 <= coal_Vd:  #硬C档
+    elif 36 <= coal_Vd:  #高档硬C
         if (2500 <= coal_MF < 10000) and (50 <= coal_TD < 175): return ('硬煤')
         elif (2500 <= coal_MF < 10000) or (50 <= coal_TD < 175): return ('半硬优')
         elif (coal_MF < 1000) and (coal_TD < 50): return ('软煤')
         elif (coal_MF < 1000) or (coal_TD < 50): return ('半软')
+        else: return ('半硬')
+    elif 27 <= coal_Vd < 30:  #中档硬A
+        if (7500 <= coal_MF) and (175 <= coal_TD): return ('硬煤')
+        elif (7500 <= coal_MF) or (175 <= coal_TD): return ('半硬优')
+        elif (coal_MF < 90) and (coal_TD < 50): return ('软煤')
+        elif (coal_MF < 90) or (coal_TD < 50): return ('半软')
+        else: return ('半硬')
+    elif 24 <= coal_Vd < 27:  #中档硬B
+        if (2500 <= coal_MF < 7500) and (150 <= coal_TD < 175): return ('硬煤')
+        elif (2500 <= coal_MF < 7500) or (150 <= coal_TD < 175): return ('半硬优')
+        elif (coal_MF < 90) and (coal_TD < 50): return ('软煤')
+        elif (coal_MF < 90) or (coal_TD < 50): return ('半软')
+        else: return ('半硬')
+    elif 22 <= coal_Vd < 24:  #中档硬C
+        if (300 <= coal_MF < 2500) and (50 <= coal_TD < 150): return ('硬煤')
+        elif (300 <= coal_MF < 2500) or (50 <= coal_TD < 150): return ('半硬优')
+        elif (coal_MF < 90) and (coal_TD < 50): return ('软煤')
+        elif (coal_MF < 90) or (coal_TD < 50): return ('半软')
+        else: return ('半硬')
+    elif 18 <= coal_Vd < 22:  #低档硬A
+        if (300 <= coal_MF) and (75 <= coal_TD): return ('硬煤')
+        elif (300 <= coal_MF) or (75 <= coal_TD): return ('半硬优')
+        elif (coal_MF < 10) and (coal_TD < 25): return ('软煤')
+        elif (coal_MF < 10) or (coal_TD < 25): return ('半软')
+        else: return ('半硬')
+    elif 15 <= coal_Vd < 18:  #低档硬B
+        if (100 <= coal_MF < 300) and (50 <= coal_TD < 100): return ('硬煤')
+        elif (100 <= coal_MF < 300) or (50 <= coal_TD < 100): return ('半硬优')
+        elif (coal_MF < 10) and (coal_TD < 25): return ('软煤')
+        elif (coal_MF < 10) or (coal_TD < 25): return ('半软')
+        else: return ('半硬')
+    elif coal_Vd < 15:  #低档硬C
+        if (coal_MF < 100) and (coal_TD < 50): return ('硬煤')
+        elif (coal_MF < 100) or (coal_TD < 50): return ('半硬优')
+        elif (coal_MF < 10) and (coal_TD < 25): return ('软煤')
+        elif (coal_MF < 10) or (coal_TD < 25): return ('半软')
         else: return ('半硬')
 
 ### 根据若干指标计算煤质分级
@@ -205,7 +241,7 @@ def init_level(dfs):        #测试程序用
         dfs.loc[index,'灰分分级'] = get_Ash_level(row.煤种,row.Ad)
         dfs.loc[index,'热强度分级'] = get_HotStrength_level(row.煤种,row.CSR)
         dfs.loc[index,'硬煤分类'] = get_Hard_level(row.Vd,row.lgMF,row.TD)
-        dfs.loc[index,'煤质分级'] = get_CoalQuality_level(row.煤种,row.CRI,row.CSR,row.DI150/15,row.Y,row.G,row.TD,row.lgMF,row.Ad,row.Std,row.Vd,row.Pd,row.K2O+Na2O)
+        #dfs.loc[index,'煤质分级'] = get_CoalQuality_level(row.煤种,row.CRI,row.CSR,row.DI150/15,row.Y,row.G,row.TD,row.lgMF,row.Ad,row.Std,row.Vd,row.Pd,row.K2O+Na2O)
         #report_progress(index, len(dfs.index))
     #report_progress_done()
     return dfs
