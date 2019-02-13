@@ -1,9 +1,10 @@
 # coding=utf-8
 
-import sys
+import sys,os
 import pandas as pd
+import numpy as np
 from PyQt5 import QtGui,QtCore,QtWidgets
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog,QMessageBox
 from Import_Data import Ui_Import_Window    #导入“导入数据”窗口
 from MainWindows import Ui_MainWindow       #导入程序主窗口窗口
 from coal_index_dialog import Ui_coal_index_dialog      #导入“分煤种指标库”窗口
@@ -33,13 +34,24 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
             # 读取并初始化数据
             self.textEdit.append('开始读取数据文件:')
             dfs = read_data(self,datafiles)  #读取数据文件
+            dfs.to_csv('原始数据.csv', encoding="utf_8_sig", index=0)
             dfs = mean_by_year(self,dfs)
             dfs = init_level(self,dfs)   #5个指标分级
-
+            dfs.to_csv('年平均分级数据.csv', encoding="utf_8_sig", index=0)
 
     # 重新读取数据，合并保存
     #def reload_files(self):
     #    print()
+
+    # 打开程序主界面
+    def openmain(self):
+        if os.path.exists('原始数据.csv') and os.path.exists('年平均分级数据.csv') :
+            MainWindow.show()       #打开主窗口
+            ImportWindow.close()    #关闭数据导入窗口
+        else:
+            if os.path.exists('原始数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少年份平均分级数据.csv文件!")
+            elif os.path.exists('年平均分级数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件!")
+            else: QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件和年份平均分级数据.csv文件!")
 
 
 ### 数据库程序的主界面 ###
@@ -122,7 +134,5 @@ if __name__ == "__main__":
     MainWindow.index_trend.clicked.connect(IndexTrendWindow.show)
 
     ImportWindow.show()     #程序启动默认显示“导入数据”窗口
-    ImportWindow.Open_Main.clicked.connect(MainWindow.show)         #打开主窗口
-    ImportWindow.Open_Main.clicked.connect(ImportWindow.close)      #同时，关闭导入数据窗口
 
     sys.exit(app.exec_())

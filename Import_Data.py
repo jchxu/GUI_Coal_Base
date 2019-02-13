@@ -103,7 +103,7 @@ class Ui_Import_Window(object):
         Import_Window.setStatusBar(self.statusbar)
 
         self.retranslateUi(Import_Window)
-        #self.Open_Main.clicked.connect(Import_Window.openmain)
+        self.Open_Main.clicked.connect(Import_Window.openmain)
         self.find_files_btn1.clicked.connect(Import_Window.find_files)
         self.find_files_btn2.clicked.connect(Import_Window.find_files)
         self.quit_btn.clicked.connect(Import_Window.close)
