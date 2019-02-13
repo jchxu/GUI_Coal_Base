@@ -7,12 +7,12 @@
 
 import sys
 import pandas as pd
-from Import_Data_Func import *
+from Import_Data_Func_fortest import *
 
 pd.set_option('display.max_columns', None)
 
 #datafiles = ['D:/PycharmProjects/宝钢/GUI_Coal_Base/原始数据.csv','D:/PycharmProjects/宝钢/GUI_Coal_Base/原始数据.xls','D:/PycharmProjects/宝钢/GUI_Coal_Base/原始数据.xlsx']
-datafiles = ['原始数据.xlsx','原始数据 - 副本.xlsx']
+datafiles = ['原始数据.xlsx','原始数据-2.xlsx']
 dfs = read_data(datafiles)
 dfs.to_csv('原始数据.csv',encoding="utf_8_sig",index=0)
 dfs = mean_by_year(dfs)
