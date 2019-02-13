@@ -18,6 +18,9 @@ from Import_Data_Func import *      #导入数据的相关函数
 
 ### 导入数据的窗口界面 ###
 class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
+    df_origin = pd.DataFrame
+    df_mean = pd.DataFrame
+
     def __init__(self):
         super(Import_Window, self).__init__()
         self.setupUi(self)
@@ -34,10 +37,10 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
             # 读取并初始化数据
             self.textEdit.append('开始读取数据文件:')
             dfs = read_data(self,datafiles)  #读取数据文件
-            dfs.to_csv('原始数据.csv', encoding="utf_8_sig", index=0)
+            dfs.to_csv('原始数据.csv', encoding='gb2312', index=0)
             dfs = mean_by_year(self,dfs)
             dfs = init_level(self,dfs)   #5个指标分级
-            dfs.to_csv('年平均分级数据.csv', encoding="utf_8_sig", index=0)
+            dfs.to_csv('年平均分级数据.csv', encoding='gb2312', index=0)
 
     # 重新读取数据，合并保存
     #def reload_files(self):
@@ -53,19 +56,56 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
             elif os.path.exists('年平均分级数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件!")
             else: QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件和年份平均分级数据.csv文件!")
 
+### 读取程序保存的数据文件
+class Read_CSVData():
+    file_origin = open('原始数据.csv')
+    file_mean = open('年平均分级数据.csv')
+    df_origin = pd.read_csv(file_origin, encoding='utf-8')
+    df_mean = pd.read_csv(file_mean, encoding='utf-8')
 
 ### 数据库程序的主界面 ###
 class Main_Window(QtWidgets.QMainWindow,Ui_MainWindow):
+    #print(Read_CSVData.df_mean)
     def __init__(self):
         super(Main_Window, self).__init__()
         self.setupUi(self)
 
 ### 分品种煤质指标数据窗口 ###
 class Coal_Index_Window(QDialog):
+
     def __init__(self):
         QDialog.__init__(self)
         self.child = Ui_coal_index_dialog()
         self.child.setupUi(self)
+    def screening_btn_click(self):
+        coal_Place = self.child.comboBox_1.currentText()
+        coal_Kind = self.child.comboBox_2.currentText()
+        coal_Year = self.child.comboBox_3.currentText()
+        coal_Quality = self.child.comboBox_4.currentText()
+        coal_HotStr = self.child.comboBox_5.currentText()
+        coal_Hard = self.child.comboBox_6.currentText()
+        coal_Ash = self.child.comboBox_7.currentText()
+        coal_Std = self.child.comboBox_8.currentText()
+
+        # 根据下拉列表中的数值筛选数据
+        df = Read_CSVData.df_mean
+        if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
+        if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
+        if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]
+        if (not coal_HotStr == '所有'): df = df[df.热强度分级 == coal_HotStr]
+        if (not coal_Hard == '所有'): df = df[df.硬煤分类 == coal_Hard]
+        if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
+        if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
+        print(df)
+        self.child.label_num.setText('共计%d条数据.' % len(df))
+
+        self.child.result_table.setRowCount(len(df))
+        table_header = ['年份','国家','煤种','产地','煤名称','Ad','Std','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
+        self.child.result_table.setColumnCount(len(table_header))
+        self.child.result_table.setHorizontalHeaderLabels(table_header)
+
+
+
 
 ### 基础煤种指标数据窗口 ###
 class Base_Coal_Window(QDialog):

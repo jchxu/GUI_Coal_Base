@@ -116,7 +116,7 @@
     <string>热强度</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_6">
+  <widget class="QComboBox" name="comboBox_7">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -246,7 +246,7 @@
     <string>硬度</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_4">
+  <widget class="QComboBox" name="comboBox_5">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -282,7 +282,7 @@
     </property>
    </item>
   </widget>
-  <widget class="QComboBox" name="comboBox_7">
+  <widget class="QComboBox" name="comboBox_8">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -370,7 +370,7 @@
     <string>硫分</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_5">
+  <widget class="QComboBox" name="comboBox_6">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -462,7 +462,7 @@
     </property>
    </item>
   </widget>
-  <widget class="QComboBox" name="comboBox">
+  <widget class="QComboBox" name="comboBox_1">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -555,7 +555,7 @@
     <string>煤质分级</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_8">
+  <widget class="QComboBox" name="comboBox_4">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -595,6 +595,40 @@
      <string>一般</string>
     </property>
    </item>
+  </widget>
+  <widget class="QTableWidget" name="result_table">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>60</y>
+     <width>961</width>
+     <height>451</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>宋体</family>
+    </font>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_num">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>520</y>
+     <width>151</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>新宋体</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
   </widget>
  </widget>
  <resources/>
