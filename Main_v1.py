@@ -20,7 +20,6 @@ from Import_Data_Func import *      #导入数据的相关函数
 class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
     df_origin = pd.DataFrame
     df_mean = pd.DataFrame
-
     def __init__(self):
         super(Import_Window, self).__init__()
         self.setupUi(self)
@@ -72,11 +71,12 @@ class Main_Window(QtWidgets.QMainWindow,Ui_MainWindow):
 
 ### 分品种煤质指标数据窗口 ###
 class Coal_Index_Window(QDialog):
-
     def __init__(self):
         QDialog.__init__(self)
         self.child = Ui_coal_index_dialog()
         self.child.setupUi(self)
+
+    # 根据已选下拉列表筛选并显示数据
     def screening_btn_click(self):
         coal_Place = self.child.comboBox_1.currentText()
         coal_Kind = self.child.comboBox_2.currentText()
@@ -86,7 +86,6 @@ class Coal_Index_Window(QDialog):
         coal_Hard = self.child.comboBox_6.currentText()
         coal_Ash = self.child.comboBox_7.currentText()
         coal_Std = self.child.comboBox_8.currentText()
-
         # 根据下拉列表中的数值筛选数据
         df = Read_CSVData.df_mean
         if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
@@ -96,16 +95,23 @@ class Coal_Index_Window(QDialog):
         if (not coal_Hard == '所有'): df = df[df.硬煤分类 == coal_Hard]
         if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
         if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
-        print(df)
+        df = df.reset_index(drop=True)
         self.child.label_num.setText('共计%d条数据.' % len(df))
-
+        # 表格行数、列标题设置
         self.child.result_table.setRowCount(len(df))
-        table_header = ['年份','国家','煤种','产地','煤名称','Ad','Std','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
+        table_header = ['年份','国家','煤种','产地','煤名称','煤质分级','热强度分级','硬煤分类','Ad','灰分分级','Std','硫分分级','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
         self.child.result_table.setColumnCount(len(table_header))
         self.child.result_table.setHorizontalHeaderLabels(table_header)
-
-
-
+        # 表格内容填充
+        for index,row in df.iterrows():
+            for j in range(len(table_header)):
+                inputitem = str(row[table_header[j]])
+                newItem = QtWidgets.QTableWidgetItem(inputitem)
+                newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
+                self.child.result_table.setItem(index,j,newItem)
+        # 表格格式设置
+        self.child.result_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)  #选中一行
+        self.child.result_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents) #自适应调整列宽
 
 ### 基础煤种指标数据窗口 ###
 class Base_Coal_Window(QDialog):
