@@ -36,6 +36,17 @@ def read_data(datafiles):           #测试程序用
     dfs = pd.concat(dflist, ignore_index=True)
     return dfs
 
+### 获取基础煤种的原始数据
+def get_Base_coal(dfs):
+    print(dfs)
+    base_dfs = pd.DataFrame
+    base_dfs = dfs.groupby([dfs['煤名称'],dfs['年份']])
+    #print(base_dfs.size())
+    for name1,group in base_dfs:
+        print(name1)
+
+    return base_dfs
+
 ### 根据煤种和硫分数据，判断硫分分级
 def get_S_level(coal_kind,coal_Std):
     if coal_kind == '焦煤':

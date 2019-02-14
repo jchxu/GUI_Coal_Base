@@ -9,7 +9,7 @@ from Import_Data import Ui_Import_Window    #导入“导入数据”窗口
 from MainWindows import Ui_MainWindow       #导入程序主窗口窗口
 from coal_index_dialog import Ui_coal_index_dialog      #导入“分煤种指标库”窗口
 from base_coal_dialog import Ui_base_coal_dialog        #导入“基础煤种库”窗口
-from classic_coal_dialog import Ui_base_coal_dialog     #导入“经典煤种库”窗口
+from classic_coal_dialog import Ui_classic_coal_dialog     #导入“经典煤种库”窗口
 from new_coal_dialog import Ui_new_coal_dialog          #导入“新煤种库”窗口
 from mine_info_dialog import Ui_mine_info_dialog        #导入“煤矿/矿山信息”窗口
 from index_trend_dialog import Ui_index_trend_dialog    #导入“质量变化趋势”窗口
@@ -37,9 +37,16 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
             self.textEdit.append('开始读取数据文件:')
             dfs = read_data(self,datafiles)  #读取数据文件
             dfs.to_csv('原始数据.csv', encoding='gb2312', index=0)
+            base_dfs = get_Base_coal(self,dfs)
+            base_dfs.to_csv('基础煤种原始数据.csv', encoding='gb2312', index=0)
+
             dfs = mean_by_year(self,dfs)
             dfs = init_level(self,dfs)   #5个指标分级
             dfs.to_csv('年平均分级数据.csv', encoding='gb2312', index=0)
+
+            base_dfs = mean_by_year(self,base_dfs)
+            base_dfs = init_level(self,base_dfs)   #5个指标分级
+            base_dfs.to_csv('基础煤种年平均分级数据.csv', encoding='gb2312', index=0)
 
     # 重新读取数据，合并保存
     #def reload_files(self):
@@ -119,13 +126,20 @@ class Base_Coal_Window(QDialog):
         QDialog.__init__(self)
         self.child = Ui_base_coal_dialog()
         self.child.setupUi(self)
+    # 根据已选下拉列表筛选并显示数据
+    def screening_btn_click(self):
+        print()
 
 ### 经典煤种指标数据窗口 ###
 class Classic_Coal_Window(QDialog):
     def __init__(self):
         QDialog.__init__(self)
-        self.child = Ui_base_coal_dialog()
+        self.child = Ui_classic_coal_dialog()
         self.child.setupUi(self)
+    # 根据已选下拉列表筛选并显示数据
+    def screening_btn_click(self):
+        print()
+
 
 ### 新煤种指标数据窗口 ###
 class New_Coal_Window(QDialog):

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>base_coal_dialog</class>
- <widget class="QDialog" name="base_coal_dialog">
+ <class>classic_coal_dialog</class>
+ <widget class="QDialog" name="classic_coal_dialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -602,7 +602,7 @@
   <connection>
    <sender>screening_btn</sender>
    <signal>clicked()</signal>
-   <receiver>base_coal_dialog</receiver>
+   <receiver>classic_coal_dialog</receiver>
    <slot>screening_btn_click()</slot>
    <hints>
     <hint type="sourcelabel">

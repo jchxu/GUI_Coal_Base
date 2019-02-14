@@ -36,6 +36,11 @@ def read_data(self,datafiles):     #GUI程序用
     dfs = pd.concat(dflist, ignore_index=True)
     return dfs
 
+### 获取基础煤种的原始数据
+def get_Base_coal(self,dfs):
+    print()
+    return
+
 ### 根据煤种和硫分数据，判断硫分分级
 def get_S_level(coal_kind,coal_Std):
     if coal_kind == '焦煤':
