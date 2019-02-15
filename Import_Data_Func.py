@@ -38,8 +38,49 @@ def read_data(self,datafiles):     #GUI程序用
 
 ### 获取基础煤种的原始数据
 def get_Base_coal(self,dfs):
-    print()
-    return
+    base_dfs = pd.DataFrame
+    namelist = dfs['煤名称'].tolist()
+    yearlist = dfs['年份'].tolist()
+    unique_name = list(set(namelist))
+    # 获取每个煤名称对应的年份
+    name_year = {}
+    for item in unique_name:
+        name_year[item] = []
+    for i in range(len(namelist)):
+        name_year[namelist[i]].append(int(yearlist[i]))
+    # 获取次数并判断是否属于基础煤种
+    base_name = []
+    base_year = {}
+    for item in unique_name:
+        years = name_year[item]
+        years.sort()
+        # 获取三个时间段内使用的年数
+        list1996 = []
+        list2009 = []
+        list2015 = []
+        for yy in years:
+            if (yy >= 1996): list1996.append(yy)
+            if (yy >= 2009): list2009.append(yy)
+            if (yy >= 2015): list2015.append(yy)
+        # 判断是否基础煤种，并记录使用年份
+        if (len(set(list1996)) >= 16):
+            base_name.append(item)
+            base_year[item] = 1996
+        elif (len(set(list2009)) >= 8):
+            base_name.append(item)
+            base_year[item] = 2009
+        elif (len(set(list2015)) >= 4):
+            base_name.append(item)
+            base_year[item] = 2015
+
+    # 根据基础煤种名称和使用年份，获取基础煤种原始数据
+    dflist = []
+    for item in base_name:
+        df_name = dfs[(dfs['煤名称'] == item) & (dfs['年份'] >= base_year[item])]
+        dflist.append(df_name)
+    base_dfs = pd.concat(dflist, ignore_index=True)
+    return base_dfs
+
 
 ### 根据煤种和硫分数据，判断硫分分级
 def get_S_level(coal_kind,coal_Std):
@@ -310,7 +351,7 @@ def mean_by_year(self,dfs):    #GUI程序用
                     if (names[nameindex] in dfs_yearrangeGM.index) and (col in dfs_yearrangeGM.columns):
                         dfs_mean_yearrange.loc[initnum+nameindex,col] = dfs_yearrangeGM.loc[names[nameindex],col]
     #print('已根据年份时间段对各煤种进行指标数据平均')                   #测试程序用
-    self.textEdit.append('已根据年份时间段对各煤种进行指标数据平均')   #GUI程序用
+    self.textEdit.append('已根据年份时间段进行数据平均')   #GUI程序用
     return dfs_mean_yearrange
 
 ### 根据数据对煤质、热强度、硬煤分类、灰分、硫分进行分级，并插入各自数据中
