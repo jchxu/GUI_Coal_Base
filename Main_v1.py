@@ -107,7 +107,7 @@ class Coal_Index_Window(QDialog):
         if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
         if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
         df = df.reset_index(drop=True)
-        print(df)
+        #print(df)
         self.child.label_num.setText('共计%d条数据.' % len(df))
         # 表格行数、列标题设置
         self.child.result_table.setRowCount(len(df))
@@ -152,7 +152,7 @@ class Base_Coal_Window(QDialog):
         if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
         if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
         df = df.reset_index(drop=True)
-        print(df)
+        #print(df)
         self.child.label_num.setText('共计%d条数据.' % len(df))
         # 表格行数、列标题设置
         self.child.result_table.setRowCount(len(df))

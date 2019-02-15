@@ -81,6 +81,19 @@ def get_Base_coal(dfs):
     base_dfs = pd.concat(dflist, ignore_index=True)
     return base_dfs
 
+### 获取经典煤种数据
+def get_Classic_coal(dfs):
+    classic_dfs = pd.DataFrame
+    dflist = []
+    df1 = dfs[(dfs['年份'] >= 1999) & (dfs['年份'] <= 2002)]    # 1999-2002年间用的煤种
+
+    dfs_level = init_level(dfs)
+    df2 = dfs_level[(dfs_level['煤质分级'] == '中等')]    # 煤质分级为特等的煤种
+    print(df2)
+
+    return classic_dfs
+
+
 ### 根据煤种和硫分数据，判断硫分分级
 def get_S_level(coal_kind,coal_Std):
     if coal_kind == '焦煤':
@@ -367,7 +380,7 @@ def init_level(dfs):        #测试程序用
         dfs.loc[index,'热强度分级'] = get_HotStrength_level(row.煤种,row.CSR)
         dfs.loc[index,'硬煤分类'] = get_Hard_level(row.Vd,row.lgMF,row.TD)
         dfs.loc[index,'煤质分级'] = get_CoalQuality_level(row.煤种,row.CRI,row.CSR,row.DI150_15,row.Y,row.G,row.TD,row.lgMF,row.Ad,row.Std,row.Vd,row.Pd,row.K2O_Na2O)
-        dfs.loc[index,'煤质分级'] = update_CoalQuality_level(row.硫分分级,row.灰分分级,row.热强度分级,row.硬煤分类,row.煤质分级)
+        dfs.loc[index,'煤质分级'] = update_CoalQuality_level(row.硫分分级,row.灰分分级,row.热强度分级,row.硬煤分类,dfs.loc[index,'煤质分级'])
         #report_progress(index, len(dfs.index))
     #report_progress_done()
     return dfs
