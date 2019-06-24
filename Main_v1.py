@@ -66,12 +66,15 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
 
 ### 读取程序保存的数据文件
 class Read_CSVData():
-    file_origin = open('原始数据.csv')
-    file_mean = open('年平均分级数据.csv')
-    file_base = open('基础煤种年平均分级数据.csv')
-    df_origin = pd.read_csv(file_origin, encoding='utf-8')
-    df_mean = pd.read_csv(file_mean, encoding='utf-8')
-    df_base = pd.read_csv(file_base, encoding='utf-8')
+    if os.path.exists('原始数据.csv'):
+        file_origin = open('原始数据.csv')
+        df_origin = pd.read_csv(file_origin, encoding='utf-8')
+    if os.path.exists('年平均分级数据.csv'):
+        file_mean = open('年平均分级数据.csv')
+        df_mean = pd.read_csv(file_mean, encoding='utf-8')
+    if os.path.exists('基础煤种年平均分级数据.csv'):
+        file_base = open('基础煤种年平均分级数据.csv')
+        df_base = pd.read_csv(file_base, encoding='utf-8')
 
 ### 数据库程序的主界面 ###
 class Main_Window(QtWidgets.QMainWindow,Ui_MainWindow):
