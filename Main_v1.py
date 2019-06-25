@@ -259,6 +259,11 @@ class New_Coal_Window(QDialog):
         self.child.setupUi(self)
     # 根据已选下拉列表筛选并显示数据
     def screening_btn_click(self):
+        ## 获取新煤种数据
+        df_origin = Read_CSVData.df_origin
+        new_dfs = get_New_coal(df_origin)  # 获取新煤种数据
+        df = init_level(new_dfs)  # 5个指标分级
+        df.to_csv('新煤种数据.csv', encoding='gb2312', index=0)
         #coal_Place = self.child.comboBox_1.currentText()
         coal_Kind = self.child.comboBox_2.currentText()
         coal_Year = self.child.comboBox_3.currentText()
@@ -273,7 +278,7 @@ class New_Coal_Window(QDialog):
         #new_dfs = get_New_coal(self, df_origin)  # 获取新煤种数据
         #new_dfs = init_level(self, new_dfs)  # 5个指标分级
         #new_dfs.to_csv('新煤种数据.csv', encoding='gb2312', index=0)
-        df = Read_CSVData.df_new
+        #df = Read_CSVData.df_new
         if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
         if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
         if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]

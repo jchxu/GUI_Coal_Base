@@ -137,7 +137,7 @@ def get_Classic_coal(yeardfs, alldfs):
     return classic_dfs
 
 ###
-def get_New_coal(self, dfs):# 获取新煤种数据
+def get_New_coal(dfs):# 获取新煤种数据
     new_dfs = dfs[(dfs.备注 == '新')| (dfs.备注 == 'new') ]
     return new_dfs
 
