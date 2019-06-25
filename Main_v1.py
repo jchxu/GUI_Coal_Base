@@ -3,6 +3,7 @@
 import sys,os
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from PyQt5 import QtGui,QtCore,QtWidgets
 from PyQt5.QtWidgets import QDialog,QMessageBox
 from Import_Data import Ui_Import_Window    #导入“导入数据”窗口
@@ -268,17 +269,12 @@ class New_Coal_Window(QDialog):
         #coal_Place = self.child.comboBox_1.currentText()
         coal_Kind = self.child.comboBox_2.currentText()
         coal_Year = self.child.comboBox_3.currentText()
-        coal_Quality = self.child.comboBox_4.currentText()
-        coal_HotStr = self.child.comboBox_5.currentText()
-        coal_Hard = self.child.comboBox_6.currentText()
-        coal_Ash = self.child.comboBox_7.currentText()
-        coal_Std = self.child.comboBox_8.currentText()
+        coal_Quality = self.child.comboBox_8.currentText()
+        coal_HotStr = self.child.comboBox_4.currentText()
+        coal_Hard = self.child.comboBox_5.currentText()
+        coal_Ash = self.child.comboBox_6.currentText()
+        coal_Std = self.child.comboBox_7.currentText()
         # 根据下拉列表中的数值筛选数据
-        #df_origin = Read_CSVData.df_origin
-        ##self.textEdit.append('\n获取新煤种数据:')
-        #new_dfs = get_New_coal(self, df_origin)  # 获取新煤种数据
-        #new_dfs = init_level(self, new_dfs)  # 5个指标分级
-        #new_dfs.to_csv('新煤种数据.csv', encoding='gb2312', index=0)
         #df = Read_CSVData.df_new
         if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
         if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
@@ -320,15 +316,22 @@ class Index_Trend_Window(QDialog):
         self.child.setupUi(self)
 
     def screening_btn_click(self):
-        coal_Kind = self.child.comboBox_2.currentText()
         # 获取分时间质量变化数据
         df_origin = Read_CSVData.df_origin
         df_3years = df_origin[df_origin.年份 >= 2016]
         df_3years = mean_by_year(df_3years)
         df_yearregion = df_origin[df_origin.年份 <2016]
         df_yearregion = mean_by_yearregion(df_yearregion)
-        df_trend = pd.concat([df_yearregion,df_3years],ignore_index=True,sort=False)
-        print(df_trend)
+        df = pd.concat([df_yearregion,df_3years],ignore_index=True,sort=False)
+        df.to_csv('质量变化趋势.csv', encoding='gb2312', index=0)
+        # 根据下拉列表中的数值筛选数据
+        coal_Kind = self.child.comboBox_2.currentText()
+        df = df[df.煤种 == coal_Kind]
+        print(df)
+        plt.figure()
+        df.plot(x='年份',y='CRI')
+        plt.show()
+
     ######## Slot functions #############
 
     #def slot_major(self):

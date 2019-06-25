@@ -72,11 +72,6 @@
    </property>
    <item>
     <property name="text">
-     <string>所有</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
      <string>焦煤</string>
     </property>
    </item>
