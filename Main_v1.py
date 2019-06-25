@@ -66,13 +66,14 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
 
     # 打开程序主界面
     def openmain(self):
-        if os.path.exists('原始数据.csv') and os.path.exists('年均数据.csv') :
+        if os.path.exists('原始数据.csv'):# and os.path.exists('年均数据.csv') :
             MainWindow.show()       #打开主窗口
             ImportWindow.close()    #关闭数据导入窗口
         else:
-            if os.path.exists('原始数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少年均数据.csv文件!")
-            elif os.path.exists('年均数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件!")
-            else: QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件和年均数据.csv文件!")
+            QMessageBox.warning(self, "缺少原始数据.csv文件!")
+            #if os.path.exists('原始数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少年均数据.csv文件!")
+            #elif os.path.exists('年均数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件!")
+            #else: QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件和年均数据.csv文件!")
 
 ### 读取程序保存的数据文件
 class Read_CSVData():
