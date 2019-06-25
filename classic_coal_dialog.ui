@@ -13,32 +13,11 @@
   <property name="windowTitle">
    <string>经典煤种库</string>
   </property>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>60</y>
-     <width>41</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>新宋体</family>
-     <pointsize>14</pointsize>
-     <weight>50</weight>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>产地</string>
-   </property>
-  </widget>
   <widget class="QComboBox" name="comboBox_3">
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>160</y>
+     <y>120</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -91,7 +70,22 @@
    </item>
    <item>
     <property name="text">
-     <string>2016至今</string>
+     <string>2016</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>2017</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>2018</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>2019</string>
     </property>
    </item>
   </widget>
@@ -99,7 +93,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>260</y>
+     <y>240</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -166,7 +160,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>460</y>
+     <y>480</y>
      <width>170</width>
      <height>50</height>
     </rect>
@@ -187,7 +181,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>110</y>
+     <y>60</y>
      <width>41</width>
      <height>31</height>
     </rect>
@@ -229,7 +223,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>310</y>
+     <y>300</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -250,7 +244,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>260</y>
+     <y>240</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -286,7 +280,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>410</y>
+     <y>420</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -353,7 +347,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>410</y>
+     <y>420</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -374,7 +368,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>310</y>
+     <y>300</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -420,7 +414,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>110</y>
+     <y>60</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -462,62 +456,11 @@
     </property>
    </item>
   </widget>
-  <widget class="QComboBox" name="comboBox">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>60</y>
-     <width>120</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>新宋体</family>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-   <item>
-    <property name="text">
-     <string>所有</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>国内</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>国外</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>中国，山西</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>中国，华东</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>中国，其他</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>巴西</string>
-    </property>
-   </item>
-  </widget>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>160</y>
+     <y>120</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -538,7 +481,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>210</y>
+     <y>180</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -559,7 +502,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>210</y>
+     <y>180</y>
      <width>120</width>
      <height>30</height>
     </rect>
@@ -595,6 +538,61 @@
      <string>一般</string>
     </property>
    </item>
+  </widget>
+  <widget class="QTableWidget" name="result_table">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>60</y>
+     <width>961</width>
+     <height>451</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <family>宋体</family>
+    </font>
+   </property>
+   <property name="sizeAdjustPolicy">
+    <enum>QAbstractScrollArea::AdjustToContents</enum>
+   </property>
+   <property name="alternatingRowColors">
+    <bool>true</bool>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::ExtendedSelection</enum>
+   </property>
+   <property name="sortingEnabled">
+    <bool>true</bool>
+   </property>
+   <attribute name="verticalHeaderCascadingSectionResizes">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QLabel" name="label_num">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>520</y>
+     <width>151</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>新宋体</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
   </widget>
  </widget>
  <resources/>

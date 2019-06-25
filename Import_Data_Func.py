@@ -37,7 +37,8 @@ def read_data(self,datafiles):     #GUI程序用
     return dfs
 
 ### 获取基础煤种的原始数据
-def get_Base_coal(self,dfs):
+#def get_Base_coal(self,dfs):
+def get_Base_coal(dfs):
     base_dfs = pd.DataFrame
     namelist = dfs['煤名称'].tolist()
     yearlist = dfs['年份'].tolist()
@@ -85,7 +86,8 @@ def get_Base_coal(self,dfs):
     return base_dfs2
 
 ### 获取经典煤种数据
-def get_Classic_coal(self, dfs,yeardfs,alldfs):
+#def get_Classic_coal(self, dfs, yeardfs, alldfs):
+def get_Classic_coal(yeardfs, alldfs):
     #1999-2002年间使用的煤种
     classic_dfs1= yeardfs[(yeardfs.年份 >= 1999) & (yeardfs.年份 <= 2002)]
     classic_dfs1 = pd.concat([classic_dfs1, pd.DataFrame(columns=['入选原因'])], sort=False)
@@ -94,14 +96,50 @@ def get_Classic_coal(self, dfs,yeardfs,alldfs):
    #煤质分级为特等的煤种
     classic_dfs2 = alldfs[(alldfs.煤质分级 == '特等') & (alldfs.年份 != '1999-2002')]
     classic_dfs2 = pd.concat([classic_dfs2, pd.DataFrame(columns=['入选原因'])], sort=False)
-    for index, row in classic_dfs2.iterrows():
-        classic_dfs2.loc[index, '入选原因'] = '煤质分级为特等的煤种'
+    if len(classic_dfs2) > 0:
+        for index, row in classic_dfs2.iterrows():
+            classic_dfs2.loc[index, '入选原因'] = '煤质分级为特等的煤种'
     #分煤种、分时间段主要指标排名前3的煤种
+    dflist = []
+    maincols = ['CRI', 'CSR', 'DI150_15','Y','G', 'TD', 'lgMF','Ad', 'Std', 'Vd', 'Pd', 'K2O_Na2O']
+    colorder = {}
+    for item in ['CSR','DI150_15','Y','G','TD','lgMF']:
+        colorder[item] = False
+    for item in ['CRI','Ad','Std','Vd','Pd','K2O_Na2O']:
+        colorder[item] = True
+    classic_dfs31 = yeardfs[(yeardfs.年份 >= 2016)]
+    for col in maincols:
+        df = classic_dfs31.sort_values(ascending = colorder[col],by=col)
+        df = pd.concat([df, pd.DataFrame(columns=['入选原因'])], sort=False)
+        if len(df) > 0:
+            for index, row in df.iterrows():
+                df.loc[index, '入选原因'] = '近三年'+col+'指标排序前三'
+        if len(df) > 3:
+            dflist.append(df[0:3])
+        else:
+            dflist.append(df)
+    years_region = ['1985-1990','1991-1995','1996-1998','2003-2005','2006-2010','2011-2015']
+    classic_dfs32 = alldfs[(alldfs.年份 != '2016至今') & (alldfs.年份 != '1999-2002')]
+    for year in years_region:
+        dfyearregion = classic_dfs32[classic_dfs32.年份 == year]
+        for col in maincols:
+            df = dfyearregion.sort_values(ascending=colorder[col], by=col)
+            df = pd.concat([df, pd.DataFrame(columns=['入选原因'])], sort=False)
+            if len(df) > 0:
+                for index, row in df.iterrows():
+                    df.loc[index, '入选原因'] = year+'年间'+col+'指标排序前三'
+            if len(df) > 3:
+                dflist.append(df[0:3])
+            else:
+                dflist.append(df)
+    classic_dfs3 = pd.concat(dflist, ignore_index=True,sort=False)
+    classic_dfs = pd.concat([classic_dfs1,classic_dfs2,classic_dfs3], ignore_index=True, sort=False)
+    return classic_dfs
 
-
-    #print(classic_dfs2)
-    return classic_dfs1
-
+###
+def get_New_coal(self, dfs):# 获取新煤种数据
+    new_dfs = dfs[(dfs.备注 == '新')| (dfs.备注 == 'new') ]
+    return new_dfs
 
 ### 根据煤种和硫分数据，判断硫分分级
 def get_S_level(coal_kind,coal_Std):
@@ -333,8 +371,8 @@ def update_CoalQuality_level(S_level,Ash_level,HotStrength_level,Hard_level,Coal
     else: return CoalQuality_level
 
 ### 根据时间段对数据进行分段平均
-def mean_by_yearregion(self,dfs):    #GUI程序用
-#def mean_by_year(dfs):          #测试程序用
+#def mean_by_yearregion(self,dfs):    #GUI程序用
+def mean_by_yearregion(dfs):          #测试程序用
     year_range = ['1985-1990','1991-1995','1996-1998','1999-2002','2003-2005','2006-2010','2011-2015','2016至今']
     cols = dfs.columns.tolist()
     dfs_mean_yearrange = pd.DataFrame(columns=cols)
@@ -404,13 +442,13 @@ def mean_by_yearregion(self,dfs):    #GUI程序用
                     dfs_mean_yearrange.loc[initnum + nameindex, '全水分'] = water[names[nameindex]]
                     if ('入选原因' in cols):
                         dfs_mean_yearrange.loc[initnum + nameindex, '入选原因'] = reason[names[nameindex]]
-    print('已根据时间段对各煤种进行指标数据平均')                   #测试程序用
-    self.textEdit.append('已根据时间段对各煤种进行指标数据平均')   #GUI程序用
+    #print('已根据时间段对各煤种进行指标数据平均')                   #测试程序用
+    #self.textEdit.append('已根据时间段对各煤种进行指标数据平均')   #GUI程序用
     return dfs_mean_yearrange
 
 ### 根据年份对数据进行平均
-def mean_by_year(self,dfs):    #GUI程序用
-#def mean_by_year(dfs):          #测试程序用
+#def mean_by_year(self,dfs):    #GUI程序用
+def mean_by_year(dfs):          #测试程序用
     cols = dfs.columns.tolist()
     dfs_mean_year = pd.DataFrame(columns=cols)
     for item in ['序号', '煤种', '煤名称', '年份', '国家', '产地']:
@@ -441,18 +479,18 @@ def mean_by_year(self,dfs):    #GUI程序用
                 dfs_mean_year.loc[initnum+nameindex, '产地'] = coal_place[names[nameindex]]
                 if (names[nameindex] in dfs_yearGM.index) and (col in dfs_yearGM.columns):
                     dfs_mean_year.loc[initnum+nameindex,col] = dfs_yearGM.loc[names[nameindex],col]
-    print('已根据年份对各煤种进行指标数据平均')  # 测试程序用
-    self.textEdit.append('已根据年份对各煤种进行指标数据平均')   #GUI程序用
+    #print('已根据年份对各煤种进行指标数据平均')  # 测试程序用
+    #self.textEdit.append('已根据年份对各煤种进行指标数据平均')   #GUI程序用
     return dfs_mean_year
 
 ### 根据数据对煤质、热强度、硬煤分类、灰分、硫分进行分级，并插入各自数据中
-def init_level(self,dfs):  #GUI程序用
-#def init_level(dfs):        #测试程序用
+#def init_level(self,dfs):  #GUI程序用
+def init_level(dfs):        #测试程序用
     colnum = len(dfs.index)
     new_indexs = ['煤质分级','热强度分级','硬煤分类','灰分分级','硫分分级']
     dfs = pd.concat([dfs, pd.DataFrame(columns=new_indexs)],sort=False)
-    print('根据各指标进行煤质、热强度、硬煤分类、灰分、硫分分级')                  #测试程序用
-    self.textEdit.append('根据各指标进行煤质、热强度、硬煤分类、灰分、硫分分级')  #GUI程序用
+    #print('根据各指标进行煤质、热强度、硬煤分类、灰分、硫分分级')                  #测试程序用
+    #self.textEdit.append('根据各指标进行煤质、热强度、硬煤分类、灰分、硫分分级')  #GUI程序用
     for index,row in dfs.iterrows():
         dfs.loc[index,'硫分分级'] = get_S_level(row.煤种,row.Std)
         dfs.loc[index,'灰分分级'] = get_Ash_level(row.煤种,row.Ad)

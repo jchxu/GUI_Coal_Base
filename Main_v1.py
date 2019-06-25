@@ -14,7 +14,6 @@ from new_coal_dialog import Ui_new_coal_dialog          #导入“新煤种库�
 from mine_info_dialog import Ui_mine_info_dialog        #导入“煤矿/矿山信息”窗口
 from index_trend_dialog import Ui_index_trend_dialog    #导入“质量变化趋势”窗口
 from Import_Data_Func import *      #导入数据的相关函数
-#from Import_Data_Func_fortest import *      #导入数据的相关函数，测试用
 
 ### 导入数据的窗口界面 ###
 class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
@@ -37,21 +36,27 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
             self.textEdit.append('\n开始读取原始数据文件:')
             dfs = read_data(self,datafiles)  #读取原始数据
             dfs.to_csv('原始数据.csv', encoding='gb2312', index=0)
-            yeardfs = mean_by_year(self, dfs)
-            yeardfs.to_csv('年均数据.csv', encoding='gb2312', index=0)
-            alldfs = mean_by_yearregion(self,dfs)
-            alldfs = init_level(self,alldfs)   #5个指标分级
-            alldfs.to_csv('时间段分级数据.csv', encoding='gb2312', index=0)
-            # 获取基础煤种数据并进行平均、分级
-            self.textEdit.append('\n获取基础煤种数据:')
-            base_dfs = get_Base_coal(self,dfs)  #获取基础煤种数据
-            base_dfs = mean_by_yearregion(self,base_dfs)
-            base_dfs = init_level(self,base_dfs)   #5个指标分级
-            base_dfs.to_csv('基础煤种时间段分级数据.csv', encoding='gb2312', index=0)
-            # 获取基础煤种数据并进行平均、分级
-            self.textEdit.append('\n获取经典煤种数据:')
-            classic_dfs = get_Classic_coal(self, dfs,yeardfs,alldfs)  # 获取经典煤种数据
-            classic_dfs.to_csv('经典煤种数据.csv', encoding='gb2312', index=0)
+            #yeardfs = mean_by_year(self, dfs)
+            #yeardfs = init_level(self, yeardfs)
+            #yeardfs.to_csv('年均数据.csv', encoding='gb2312', index=0)
+            #alldfs = mean_by_yearregion(self,dfs)
+            #alldfs = init_level(self,alldfs)   #5个指标分级
+            #alldfs.to_csv('时间段分级数据.csv', encoding='gb2312', index=0)
+            ## 获取基础煤种数据并进行平均、分级
+            #self.textEdit.append('\n获取基础煤种数据:')
+            #base_dfs = get_Base_coal(self,dfs)  #获取基础煤种数据
+            #base_dfs = mean_by_yearregion(self,base_dfs)
+            #base_dfs = init_level(self,base_dfs)   #5个指标分级
+            #base_dfs.to_csv('基础煤种时间段分级数据.csv', encoding='gb2312', index=0)
+            ## 获取经典煤种数据
+            #self.textEdit.append('\n获取经典煤种数据:')
+            #classic_dfs = get_Classic_coal(self, dfs,yeardfs,alldfs)  # 获取经典煤种数据
+            #classic_dfs.to_csv('经典煤种数据.csv', encoding='gb2312', index=0)
+            ## 获取新煤种数据
+            #self.textEdit.append('\n获取新煤种数据:')
+            #new_dfs = get_New_coal(self, dfs)  # 获取新煤种数据
+            #new_dfs = init_level(self, new_dfs)  # 5个指标分级
+            #new_dfs.to_csv('新煤种数据.csv', encoding='gb2312', index=0)
 
             self.textEdit.append('\n请点击“打开主界面”')
 
@@ -74,18 +79,21 @@ class Read_CSVData():
     if os.path.exists('原始数据.csv'):
         file_origin = open('原始数据.csv')
         df_origin = pd.read_csv(file_origin, encoding='utf-8')
-    if os.path.exists('时间段分级数据.csv'):
-        file_regionmean = open('时间段分级数据.csv')
-        df_regionmean = pd.read_csv(file_regionmean, encoding='utf-8')
-    if os.path.exists('年均数据.csv'):
-        file_yearmean = open('年均数据.csv')
-        df_yearmean = pd.read_csv(file_yearmean, encoding='utf-8')
-    if os.path.exists('基础煤种时间段分级数据.csv'):
-        file_base = open('基础煤种时间段分级数据.csv')
-        df_base = pd.read_csv(file_base, encoding='utf-8')
-    if os.path.exists('经典煤种数据.csv'):
-        file_classic = open('经典煤种数据.csv')
-        df_classic = pd.read_csv(file_classic, encoding='utf-8')
+    #if os.path.exists('时间段分级数据.csv'):
+    #    file_regionmean = open('时间段分级数据.csv')
+    #    df_regionmean = pd.read_csv(file_regionmean, encoding='utf-8')
+    #if os.path.exists('年均数据.csv'):
+    #    file_yearmean = open('年均数据.csv')
+    #    df_yearmean = pd.read_csv(file_yearmean, encoding='utf-8')
+    #if os.path.exists('基础煤种时间段分级数据.csv'):
+    #    file_base = open('基础煤种时间段分级数据.csv')
+    #    df_base = pd.read_csv(file_base, encoding='utf-8')
+    #if os.path.exists('经典煤种数据.csv'):
+    #    file_classic = open('经典煤种数据.csv')
+    #    df_classic = pd.read_csv(file_classic, encoding='utf-8')
+    #if os.path.exists('新煤种数据.csv'):
+    #    file_new = open('新煤种数据.csv')
+    #    df_new = pd.read_csv(file_new, encoding='utf-8')
 
 ### 数据库程序的主界面 ###
 class Main_Window(QtWidgets.QMainWindow,Ui_MainWindow):
@@ -100,9 +108,13 @@ class Coal_Index_Window(QDialog):
         QDialog.__init__(self)
         self.child = Ui_coal_index_dialog()
         self.child.setupUi(self)
-
     # 根据已选下拉列表筛选并显示数据
     def screening_btn_click(self):
+        # 获取分品种分时间段煤种数据
+        df_origin = Read_CSVData.df_origin
+        df_yearregion = mean_by_yearregion(df_origin)
+        df = init_level(df_yearregion)  # 5个指标分级
+        df.to_csv('时间段分级数据.csv', encoding='gb2312', index=0)
         #coal_Place = self.child.comboBox_1.currentText()
         coal_Kind = self.child.comboBox_2.currentText()
         coal_Year = self.child.comboBox_3.currentText()
@@ -111,8 +123,8 @@ class Coal_Index_Window(QDialog):
         coal_Hard = self.child.comboBox_6.currentText()
         coal_Ash = self.child.comboBox_7.currentText()
         coal_Std = self.child.comboBox_8.currentText()
-        # 根据下拉列表中的数值筛选数据
-        df = Read_CSVData.df_regionmean
+        # 根据下拉列表截取数据
+        #df = self.df_yearregion
         if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
         if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
         if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]
@@ -144,9 +156,15 @@ class Base_Coal_Window(QDialog):
         QDialog.__init__(self)
         self.child = Ui_base_coal_dialog()
         self.child.setupUi(self)
-
     # 根据已选下拉列表筛选并显示数据
     def screening_btn_click(self):
+        # 获取基础煤种数据
+        df_origin = Read_CSVData.df_origin
+        base_dfs = get_Base_coal(df_origin)  # 获取基础煤种数据
+        base_dfs = mean_by_yearregion(base_dfs)
+        df = init_level(base_dfs)  # 5个指标分级
+        df.to_csv('基础煤种时间段分级数据.csv', encoding='gb2312', index=0)
+        # 根据下拉列表中的数值筛选数据
         #coal_Place = self.child.comboBox_1.currentText()
         coal_Kind = self.child.comboBox_2.currentText()
         coal_Year = self.child.comboBox_3.currentText()
@@ -155,8 +173,7 @@ class Base_Coal_Window(QDialog):
         coal_Hard = self.child.comboBox_6.currentText()
         coal_Ash = self.child.comboBox_7.currentText()
         coal_Std = self.child.comboBox_8.currentText()
-        # 根据下拉列表中的数值筛选数据
-        df = Read_CSVData.df_base
+        #df = Read_CSVData.df_base
         if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
         if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
         if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]
@@ -190,7 +207,48 @@ class Classic_Coal_Window(QDialog):
         self.child.setupUi(self)
     # 根据已选下拉列表筛选并显示数据
     def screening_btn_click(self):
-        print()
+        ## 获取经典煤种数据
+        df_origin = Read_CSVData.df_origin
+        yeardfs = mean_by_year(df_origin)
+        yeardfs = init_level(yeardfs)
+        allyearregiondfs = mean_by_yearregion(df_origin)
+        allyearregiondfs = init_level(allyearregiondfs)   #5个指标分级
+        df = get_Classic_coal(yeardfs,allyearregiondfs)  # 获取经典煤种数据
+        df.to_csv('经典煤种数据.csv', encoding='gb2312', index=0)
+        # 根据下拉列表中的数值筛选数据
+        #coal_Place = self.child.comboBox_1.currentText()
+        coal_Kind = self.child.comboBox_2.currentText()
+        coal_Year = self.child.comboBox_3.currentText()
+        coal_Quality = self.child.comboBox_8.currentText()
+        coal_HotStr = self.child.comboBox_4.currentText()
+        coal_Hard = self.child.comboBox_5.currentText()
+        coal_Ash = self.child.comboBox_6.currentText()
+        coal_Std = self.child.comboBox_7.currentText()
+        #df = Read_CSVData.df_classic
+        if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
+        if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
+        if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]
+        if (not coal_HotStr == '所有'): df = df[df.热强度分级 == coal_HotStr]
+        if (not coal_Hard == '所有'): df = df[df.硬煤分类 == coal_Hard]
+        if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
+        if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
+        df = df.reset_index(drop=True)
+        self.child.label_num.setText('共计%d条数据.' % len(df))
+        # 表格行数、列标题设置
+        self.child.result_table.setRowCount(len(df))
+        table_header = ['年份','国家','煤种','产地','煤名称','入选原因','煤质分级','热强度分级','硬煤分类','Ad','灰分分级','Std','硫分分级','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
+        self.child.result_table.setColumnCount(len(table_header))
+        self.child.result_table.setHorizontalHeaderLabels(table_header)
+        # 表格内容填充
+        for index,row in df.iterrows():
+            for j in range(len(table_header)):
+                inputitem = str(row[table_header[j]])
+                newItem = QtWidgets.QTableWidgetItem(inputitem)
+                newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
+                self.child.result_table.setItem(index,j,newItem)
+        # 表格格式设置
+        self.child.result_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)  #选中一行
+        self.child.result_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents) #自适应调整列宽
 
 
 ### 新煤种指标数据窗口 ###
@@ -199,6 +257,47 @@ class New_Coal_Window(QDialog):
         QDialog.__init__(self)
         self.child = Ui_new_coal_dialog()
         self.child.setupUi(self)
+    # 根据已选下拉列表筛选并显示数据
+    def screening_btn_click(self):
+        #coal_Place = self.child.comboBox_1.currentText()
+        coal_Kind = self.child.comboBox_2.currentText()
+        coal_Year = self.child.comboBox_3.currentText()
+        coal_Quality = self.child.comboBox_4.currentText()
+        coal_HotStr = self.child.comboBox_5.currentText()
+        coal_Hard = self.child.comboBox_6.currentText()
+        coal_Ash = self.child.comboBox_7.currentText()
+        coal_Std = self.child.comboBox_8.currentText()
+        # 根据下拉列表中的数值筛选数据
+        #df_origin = Read_CSVData.df_origin
+        ##self.textEdit.append('\n获取新煤种数据:')
+        #new_dfs = get_New_coal(self, df_origin)  # 获取新煤种数据
+        #new_dfs = init_level(self, new_dfs)  # 5个指标分级
+        #new_dfs.to_csv('新煤种数据.csv', encoding='gb2312', index=0)
+        df = Read_CSVData.df_new
+        if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
+        if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
+        if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]
+        if (not coal_HotStr == '所有'): df = df[df.热强度分级 == coal_HotStr]
+        if (not coal_Hard == '所有'): df = df[df.硬煤分类 == coal_Hard]
+        if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
+        if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
+        df = df.reset_index(drop=True)
+        self.child.label_num.setText('共计%d条数据.' % len(df))
+        # 表格行数、列标题设置
+        self.child.result_table.setRowCount(len(df))
+        table_header = ['年份','国家','煤种','产地','煤名称','煤质分级','热强度分级','硬煤分类','Ad','灰分分级','Std','硫分分级','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
+        self.child.result_table.setColumnCount(len(table_header))
+        self.child.result_table.setHorizontalHeaderLabels(table_header)
+        # 表格内容填充
+        for index,row in df.iterrows():
+            for j in range(len(table_header)):
+                inputitem = str(row[table_header[j]])
+                newItem = QtWidgets.QTableWidgetItem(inputitem)
+                newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
+                self.child.result_table.setItem(index,j,newItem)
+        # 表格格式设置
+        self.child.result_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)  #选中一行
+        self.child.result_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents) #自适应调整列宽
 
 ### 煤矿/矿山信息窗口 ###
 class Mine_Info_Window(QDialog):
@@ -214,7 +313,16 @@ class Index_Trend_Window(QDialog):
         self.child = Ui_index_trend_dialog()
         self.child.setupUi(self)
 
-
+    def screening_btn_click(self):
+        coal_Kind = self.child.comboBox_2.currentText()
+        # 获取分时间质量变化数据
+        df_origin = Read_CSVData.df_origin
+        df_3years = df_origin[df_origin.年份 >= 2016]
+        df_3years = mean_by_year(df_3years)
+        df_yearregion = df_origin[df_origin.年份 <2016]
+        df_yearregion = mean_by_yearregion(df_yearregion)
+        df_trend = pd.concat([df_yearregion,df_3years],ignore_index=True,sort=False)
+        print(df_trend)
     ######## Slot functions #############
 
     #def slot_major(self):
