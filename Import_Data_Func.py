@@ -84,6 +84,24 @@ def get_Base_coal(self,dfs):
         base_dfs2.loc[index, '入选原因'] = base_reason[row.煤名称]
     return base_dfs2
 
+### 获取经典煤种数据
+def get_Classic_coal(self, dfs,yeardfs,alldfs):
+    #1999-2002年间使用的煤种
+    classic_dfs1= yeardfs[(yeardfs.年份 >= 1999) & (yeardfs.年份 <= 2002)]
+    classic_dfs1 = pd.concat([classic_dfs1, pd.DataFrame(columns=['入选原因'])], sort=False)
+    for index,row in classic_dfs1.iterrows():
+        classic_dfs1.loc[index, '入选原因'] = '1999-2002年间使用的煤种'
+   #煤质分级为特等的煤种
+    classic_dfs2 = alldfs[(alldfs.煤质分级 == '特等') & (alldfs.年份 != '1999-2002')]
+    classic_dfs2 = pd.concat([classic_dfs2, pd.DataFrame(columns=['入选原因'])], sort=False)
+    for index, row in classic_dfs2.iterrows():
+        classic_dfs2.loc[index, '入选原因'] = '煤质分级为特等的煤种'
+    #分煤种、分时间段主要指标排名前3的煤种
+
+
+    #print(classic_dfs2)
+    return classic_dfs1
+
 
 ### 根据煤种和硫分数据，判断硫分分级
 def get_S_level(coal_kind,coal_Std):

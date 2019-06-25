@@ -43,11 +43,15 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
             alldfs = init_level(self,alldfs)   #5个指标分级
             alldfs.to_csv('时间段分级数据.csv', encoding='gb2312', index=0)
             # 获取基础煤种数据并进行平均、分级
-            self.textEdit.append('\n获取基础煤种原始数据:')
+            self.textEdit.append('\n获取基础煤种数据:')
             base_dfs = get_Base_coal(self,dfs)  #获取基础煤种数据
             base_dfs = mean_by_yearregion(self,base_dfs)
             base_dfs = init_level(self,base_dfs)   #5个指标分级
             base_dfs.to_csv('基础煤种时间段分级数据.csv', encoding='gb2312', index=0)
+            # 获取基础煤种数据并进行平均、分级
+            self.textEdit.append('\n获取经典煤种数据:')
+            classic_dfs = get_Classic_coal(self, dfs,yeardfs,alldfs)  # 获取经典煤种数据
+            classic_dfs.to_csv('经典煤种数据.csv', encoding='gb2312', index=0)
 
             self.textEdit.append('\n请点击“打开主界面”')
 
@@ -79,6 +83,9 @@ class Read_CSVData():
     if os.path.exists('基础煤种时间段分级数据.csv'):
         file_base = open('基础煤种时间段分级数据.csv')
         df_base = pd.read_csv(file_base, encoding='utf-8')
+    if os.path.exists('经典煤种数据.csv'):
+        file_classic = open('经典煤种数据.csv')
+        df_classic = pd.read_csv(file_classic, encoding='utf-8')
 
 ### 数据库程序的主界面 ###
 class Main_Window(QtWidgets.QMainWindow,Ui_MainWindow):
