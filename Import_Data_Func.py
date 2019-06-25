@@ -50,7 +50,7 @@ def get_Base_coal(self,dfs):
         name_year[namelist[i]].append(int(yearlist[i]))
     # 获取次数并判断是否属于基础煤种
     base_name = []
-    base_year = {}
+    base_reason = {}
     for item in unique_name:
         years = name_year[item]
         years.sort()
@@ -65,21 +65,24 @@ def get_Base_coal(self,dfs):
         # 判断是否基础煤种，并记录使用年份
         if (len(set(list1996)) >= 16):
             base_name.append(item)
-            base_year[item] = 1996
+            base_reason[item] = '1996-2018年间用过不少于16年'
         elif (len(set(list2009)) >= 8):
             base_name.append(item)
-            base_year[item] = 2009
+            base_reason[item] = '2009-2018年间用过不少于8年'
         elif (len(set(list2015)) >= 4):
             base_name.append(item)
-            base_year[item] = 2015
-
+            base_reason[item] = '2015-2018年间用过不少于4年'
     # 根据基础煤种名称和使用年份，获取基础煤种原始数据
     dflist = []
     for item in base_name:
-        df_name = dfs[(dfs['煤名称'] == item) & (dfs['年份'] >= base_year[item])]
+        df_name = dfs[(dfs['煤名称'] == item)]
         dflist.append(df_name)
     base_dfs = pd.concat(dflist, ignore_index=True)
-    return base_dfs
+    new_indexs=['入选原因']
+    base_dfs2 = pd.concat([base_dfs, pd.DataFrame(columns=new_indexs)], sort=False)
+    for index, row in base_dfs2.iterrows():
+        base_dfs2.loc[index, '入选原因'] = base_reason[row.煤名称]
+    return base_dfs2
 
 
 ### 根据煤种和硫分数据，判断硫分分级
@@ -312,7 +315,7 @@ def update_CoalQuality_level(S_level,Ash_level,HotStrength_level,Hard_level,Coal
     else: return CoalQuality_level
 
 ### 根据时间段对数据进行分段平均
-def mean_by_year(self,dfs):    #GUI程序用
+def mean_by_yearregion(self,dfs):    #GUI程序用
 #def mean_by_year(dfs):          #测试程序用
     year_range = ['1985-1990','1991-1995','1996-1998','1999-2002','2003-2005','2006-2010','2011-2015','2016至今']
     cols = dfs.columns.tolist()
@@ -331,13 +334,38 @@ def mean_by_year(self,dfs):    #GUI程序用
         if len(dfs_yearrange.index) > 0:
             names = list(set(dfs_yearrange['煤名称'].tolist()))
             coal_kind,coal_country,coal_place = {},{},{}
+            size, elem, duidensity, ashcomposition, therm, water, reason = {}, {}, {}, {}, {}, {}, {}
+            for name in names:
+                size[name] = []
+                elem[name] = []
+                duidensity[name] = []
+                ashcomposition[name] = []
+                therm[name] = []
+                water[name] = []
+                reason[name] = []
             already_names = []
             for index,row in dfs_yearrange.iterrows():
+                size[row.煤名称].append(row.粒级分布)
+                elem[row.煤名称].append(row.元素分析)
+                duidensity[row.煤名称].append(row.堆密度)
+                ashcomposition[row.煤名称].append(row.灰成分)
+                therm[row.煤名称].append(row.发热量)
+                water[row.煤名称].append(row.全水分)
+                if ('入选原因' in cols):
+                    reason[row.煤名称].append(row.入选原因)
                 if (row.煤名称 in names) and (row.煤名称 not in already_names):
                     coal_kind[row.煤名称] = row.煤种
                     coal_country[row.煤名称] = row.国家
                     coal_place[row.煤名称] = row.产地
                     already_names.append(row.煤名称)
+            for name in names:
+                size[name] = list(set(size[name]))
+                elem[name] = list(set(elem[name]))
+                duidensity[name] = list(set(duidensity[name]))
+                ashcomposition[name] = list(set(ashcomposition[name]))
+                therm[name] = list(set(therm[name]))
+                water[name] = list(set(water[name]))
+                reason[name] = list(set(reason[name]))
             dfs_yearrangeGM = dfs_yearrange.loc[:,cols].groupby(dfs_yearrange['煤名称']).mean()
             initnum = len(dfs_mean_yearrange.index)
             for nameindex in range(len(names)):
@@ -350,17 +378,62 @@ def mean_by_year(self,dfs):    #GUI程序用
                     dfs_mean_yearrange.loc[initnum+nameindex, '产地'] = coal_place[names[nameindex]]
                     if (names[nameindex] in dfs_yearrangeGM.index) and (col in dfs_yearrangeGM.columns):
                         dfs_mean_yearrange.loc[initnum+nameindex,col] = dfs_yearrangeGM.loc[names[nameindex],col]
-    #print('已根据年份时间段对各煤种进行指标数据平均')                   #测试程序用
-    self.textEdit.append('已根据年份时间段进行数据平均')   #GUI程序用
+                    dfs_mean_yearrange.loc[initnum + nameindex, '粒级分布'] = size[names[nameindex]]
+                    dfs_mean_yearrange.loc[initnum + nameindex, '元素分析'] = elem[names[nameindex]]
+                    dfs_mean_yearrange.loc[initnum + nameindex, '堆密度'] = duidensity[names[nameindex]]
+                    dfs_mean_yearrange.loc[initnum + nameindex, '灰成分'] = ashcomposition[names[nameindex]]
+                    dfs_mean_yearrange.loc[initnum + nameindex, '发热量'] = therm[names[nameindex]]
+                    dfs_mean_yearrange.loc[initnum + nameindex, '全水分'] = water[names[nameindex]]
+                    if ('入选原因' in cols):
+                        dfs_mean_yearrange.loc[initnum + nameindex, '入选原因'] = reason[names[nameindex]]
+    print('已根据时间段对各煤种进行指标数据平均')                   #测试程序用
+    self.textEdit.append('已根据时间段对各煤种进行指标数据平均')   #GUI程序用
     return dfs_mean_yearrange
+
+### 根据年份对数据进行平均
+def mean_by_year(self,dfs):    #GUI程序用
+#def mean_by_year(dfs):          #测试程序用
+    cols = dfs.columns.tolist()
+    dfs_mean_year = pd.DataFrame(columns=cols)
+    for item in ['序号', '煤种', '煤名称', '年份', '国家', '产地']:
+        if item in cols:
+            cols.remove(item)
+    years = list(set(dfs['年份'].tolist()))
+    years.sort()
+    for i in range(len(years)):
+        dfs_year = dfs[(dfs.年份 == years[i])]
+        names = list(set(dfs_year['煤名称'].tolist()))
+        coal_kind, coal_country, coal_place = {}, {}, {}
+        already_names = []
+        for index, row in dfs_year.iterrows():
+            if (row.煤名称 in names) and (row.煤名称 not in already_names):
+                coal_kind[row.煤名称] = row.煤种
+                coal_country[row.煤名称] = row.国家
+                coal_place[row.煤名称] = row.产地
+                already_names.append(row.煤名称)
+        dfs_yearGM = dfs_year.loc[:,cols].groupby(dfs_year['煤名称']).mean()
+        initnum = len(dfs_mean_year.index)
+        for nameindex in range(len(names)):
+            for col in cols:
+                dfs_mean_year.loc[initnum+nameindex, '序号'] = initnum+nameindex+1
+                dfs_mean_year.loc[initnum+nameindex, '煤种'] = coal_kind[names[nameindex]]
+                dfs_mean_year.loc[initnum+nameindex, '煤名称'] = names[nameindex]
+                dfs_mean_year.loc[initnum+nameindex, '年份'] = years[i]
+                dfs_mean_year.loc[initnum+nameindex, '国家'] = coal_country[names[nameindex]]
+                dfs_mean_year.loc[initnum+nameindex, '产地'] = coal_place[names[nameindex]]
+                if (names[nameindex] in dfs_yearGM.index) and (col in dfs_yearGM.columns):
+                    dfs_mean_year.loc[initnum+nameindex,col] = dfs_yearGM.loc[names[nameindex],col]
+    print('已根据年份对各煤种进行指标数据平均')  # 测试程序用
+    self.textEdit.append('已根据年份对各煤种进行指标数据平均')   #GUI程序用
+    return dfs_mean_year
 
 ### 根据数据对煤质、热强度、硬煤分类、灰分、硫分进行分级，并插入各自数据中
 def init_level(self,dfs):  #GUI程序用
 #def init_level(dfs):        #测试程序用
     colnum = len(dfs.index)
     new_indexs = ['煤质分级','热强度分级','硬煤分类','灰分分级','硫分分级']
-    dfs = pd.concat([dfs,pd.DataFrame(columns=new_indexs)])#, sort=False)
-    #print('根据各指标进行煤质、热强度、硬煤分类、灰分、硫分分级')                  #测试程序用
+    dfs = pd.concat([dfs, pd.DataFrame(columns=new_indexs)],sort=False)
+    print('根据各指标进行煤质、热强度、硬煤分类、灰分、硫分分级')                  #测试程序用
     self.textEdit.append('根据各指标进行煤质、热强度、硬煤分类、灰分、硫分分级')  #GUI程序用
     for index,row in dfs.iterrows():
         dfs.loc[index,'硫分分级'] = get_S_level(row.煤种,row.Std)

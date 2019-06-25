@@ -14,7 +14,7 @@ from new_coal_dialog import Ui_new_coal_dialog          #导入“新煤种库�
 from mine_info_dialog import Ui_mine_info_dialog        #导入“煤矿/矿山信息”窗口
 from index_trend_dialog import Ui_index_trend_dialog    #导入“质量变化趋势”窗口
 from Import_Data_Func import *      #导入数据的相关函数
-
+#from Import_Data_Func_fortest import *      #导入数据的相关函数，测试用
 
 ### 导入数据的窗口界面 ###
 class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
@@ -37,16 +37,17 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
             self.textEdit.append('\n开始读取原始数据文件:')
             dfs = read_data(self,datafiles)  #读取原始数据
             dfs.to_csv('原始数据.csv', encoding='gb2312', index=0)
-            alldfs = mean_by_year(self,dfs)
+            yeardfs = mean_by_year(self, dfs)
+            yeardfs.to_csv('年均数据.csv', encoding='gb2312', index=0)
+            alldfs = mean_by_yearregion(self,dfs)
             alldfs = init_level(self,alldfs)   #5个指标分级
-            alldfs.to_csv('年平均分级数据.csv', encoding='gb2312', index=0)
+            alldfs.to_csv('时间段分级数据.csv', encoding='gb2312', index=0)
             # 获取基础煤种数据并进行平均、分级
             self.textEdit.append('\n获取基础煤种原始数据:')
             base_dfs = get_Base_coal(self,dfs)  #获取基础煤种数据
-            base_dfs.to_csv('基础煤种原始数据.csv', encoding='gb2312', index=0)
-            base_dfs = mean_by_year(self,base_dfs)
+            base_dfs = mean_by_yearregion(self,base_dfs)
             base_dfs = init_level(self,base_dfs)   #5个指标分级
-            base_dfs.to_csv('基础煤种年平均分级数据.csv', encoding='gb2312', index=0)
+            base_dfs.to_csv('基础煤种时间段分级数据.csv', encoding='gb2312', index=0)
 
             self.textEdit.append('\n请点击“打开主界面”')
 
@@ -56,24 +57,27 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
 
     # 打开程序主界面
     def openmain(self):
-        if os.path.exists('原始数据.csv') and os.path.exists('年平均分级数据.csv') :
+        if os.path.exists('原始数据.csv') and os.path.exists('年均数据.csv') :
             MainWindow.show()       #打开主窗口
             ImportWindow.close()    #关闭数据导入窗口
         else:
-            if os.path.exists('原始数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少年份平均分级数据.csv文件!")
-            elif os.path.exists('年平均分级数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件!")
-            else: QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件和年份平均分级数据.csv文件!")
+            if os.path.exists('原始数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少年均数据.csv文件!")
+            elif os.path.exists('年均数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件!")
+            else: QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件和年均数据.csv文件!")
 
 ### 读取程序保存的数据文件
 class Read_CSVData():
     if os.path.exists('原始数据.csv'):
         file_origin = open('原始数据.csv')
         df_origin = pd.read_csv(file_origin, encoding='utf-8')
-    if os.path.exists('年平均分级数据.csv'):
-        file_mean = open('年平均分级数据.csv')
-        df_mean = pd.read_csv(file_mean, encoding='utf-8')
-    if os.path.exists('基础煤种年平均分级数据.csv'):
-        file_base = open('基础煤种年平均分级数据.csv')
+    if os.path.exists('时间段分级数据.csv'):
+        file_regionmean = open('时间段分级数据.csv')
+        df_regionmean = pd.read_csv(file_regionmean, encoding='utf-8')
+    if os.path.exists('年均数据.csv'):
+        file_yearmean = open('年均数据.csv')
+        df_yearmean = pd.read_csv(file_yearmean, encoding='utf-8')
+    if os.path.exists('基础煤种时间段分级数据.csv'):
+        file_base = open('基础煤种时间段分级数据.csv')
         df_base = pd.read_csv(file_base, encoding='utf-8')
 
 ### 数据库程序的主界面 ###
@@ -92,7 +96,7 @@ class Coal_Index_Window(QDialog):
 
     # 根据已选下拉列表筛选并显示数据
     def screening_btn_click(self):
-        coal_Place = self.child.comboBox_1.currentText()
+        #coal_Place = self.child.comboBox_1.currentText()
         coal_Kind = self.child.comboBox_2.currentText()
         coal_Year = self.child.comboBox_3.currentText()
         coal_Quality = self.child.comboBox_4.currentText()
@@ -101,7 +105,7 @@ class Coal_Index_Window(QDialog):
         coal_Ash = self.child.comboBox_7.currentText()
         coal_Std = self.child.comboBox_8.currentText()
         # 根据下拉列表中的数值筛选数据
-        df = Read_CSVData.df_mean
+        df = Read_CSVData.df_regionmean
         if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
         if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
         if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]
@@ -110,7 +114,6 @@ class Coal_Index_Window(QDialog):
         if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
         if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
         df = df.reset_index(drop=True)
-        #print(df)
         self.child.label_num.setText('共计%d条数据.' % len(df))
         # 表格行数、列标题设置
         self.child.result_table.setRowCount(len(df))
@@ -137,7 +140,7 @@ class Base_Coal_Window(QDialog):
 
     # 根据已选下拉列表筛选并显示数据
     def screening_btn_click(self):
-        coal_Place = self.child.comboBox_1.currentText()
+        #coal_Place = self.child.comboBox_1.currentText()
         coal_Kind = self.child.comboBox_2.currentText()
         coal_Year = self.child.comboBox_3.currentText()
         coal_Quality = self.child.comboBox_4.currentText()
@@ -155,11 +158,10 @@ class Base_Coal_Window(QDialog):
         if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
         if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
         df = df.reset_index(drop=True)
-        #print(df)
         self.child.label_num.setText('共计%d条数据.' % len(df))
         # 表格行数、列标题设置
         self.child.result_table.setRowCount(len(df))
-        table_header = ['年份','国家','煤种','产地','煤名称','煤质分级','热强度分级','硬煤分类','Ad','灰分分级','Std','硫分分级','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
+        table_header = ['年份','国家','煤种','产地','煤名称','入选原因','煤质分级','热强度分级','硬煤分类','Ad','灰分分级','Std','硫分分级','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
         self.child.result_table.setColumnCount(len(table_header))
         self.child.result_table.setHorizontalHeaderLabels(table_header)
         # 表格内容填充

@@ -17,11 +17,12 @@ datafiles = ['原始数据.xlsx']
 
 #if (not os.path.exists('原始数据.csv')) and (not os.path.exists('年平均分级数据.csv')):
 dfs = read_data(datafiles)
-alldfs = mean_by_year(dfs)
-alldfs = init_level(alldfs)
+#yeardfs = mean_by_year(dfs)
+#yeardfs.to_csv('年均数据.csv', encoding='gb2312', index=0)
+#alldfs = init_level(alldfs)
 #print(alldfs)
 #dfs.to_csv('原始数据.csv',encoding='gb2312',index=0)
-#base_dfs = get_Base_coal(dfs)
+base_dfs = get_Base_coal(dfs)
 #base_dfs = mean_by_year(base_dfs)
 #base_dfs = init_level(base_dfs)
 #dfs.to_csv('年平均分级数据.csv',encoding='gb2312',index=0)
@@ -29,9 +30,9 @@ alldfs = init_level(alldfs)
 #file_mean = open('年平均分级数据.csv')
 #df_origin = pd.read_csv(file_origin,encoding='utf-8')
 #df_mean = pd.read_csv(file_mean,encoding='utf-8')
-classic_dfs = get_Classic_coal(dfs)
+#classic_dfs = get_Classic_coal(dfs)
 
 
-print(classic_dfs)
+#print(classic_dfs)
 
 

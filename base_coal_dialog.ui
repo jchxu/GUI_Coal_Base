@@ -13,27 +13,6 @@
   <property name="windowTitle">
    <string>基础煤种指标库</string>
   </property>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>60</y>
-     <width>41</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>新宋体</family>
-     <pointsize>14</pointsize>
-     <weight>50</weight>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>产地</string>
-   </property>
-  </widget>
   <widget class="QComboBox" name="comboBox_3">
    <property name="geometry">
     <rect>
@@ -459,57 +438,6 @@
    <item>
     <property name="text">
      <string>瘦煤</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QComboBox" name="comboBox_1">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>60</y>
-     <width>120</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>新宋体</family>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-   <item>
-    <property name="text">
-     <string>所有</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>国内</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>国外</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>中国，山西</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>中国，华东</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>中国，其他</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>巴西</string>
     </property>
    </item>
   </widget>
