@@ -345,8 +345,8 @@ class Index_Trend_Window(QDialog):
             ax.set_ylabel(maincols[i])      # 设置Y轴标题
             plt.xticks(xlocs,xlabels,rotation=90)       # 设置X轴刻度文本
             #plt.scatter(df.index,df[maincols[i]], label='1999-2002年间数据',s=50, marker='p', color='red')
-            plt.plot(df.index,df[maincols[i]],linestyle='dashed', marker='o',label=maincols[i])
-            plt.scatter(1,specificY, label='1999-2002年间数据',s=100, marker='p', color='red')
+            plt.plot(df.index,df[maincols[i]],linestyle='dashed', marker='o',label=maincols[i],zorder=1)
+            plt.scatter(1,specificY, label='1999-2002年间数据',s=100, marker='p', color='red',zorder=2)
             ax.legend(loc='lower right')  # 设置图例，自动选择位置
         plt.subplots_adjust(wspace=0.3, hspace=0.8)     # 调整子图间的间距
         plt.show()
