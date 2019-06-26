@@ -3,6 +3,7 @@
 import sys,os
 import pandas as pd
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 from PyQt5 import QtGui,QtCore,QtWidgets
 from PyQt5.QtWidgets import QDialog,QMessageBox
@@ -327,9 +328,27 @@ class Index_Trend_Window(QDialog):
         # 根据下拉列表中的数值筛选数据
         coal_Kind = self.child.comboBox_2.currentText()
         df = df[df.煤种 == coal_Kind]
-        print(df)
-        plt.figure()
-        df.plot(x='年份',y='CRI')
+        xlocs = df.index.tolist()
+        xlabels = []
+        for item in df['年份'].tolist():
+            xlabels.append(str(item))
+        # 绘图
+        maincols = ['CRI', 'CSR', 'DI150_15','Y','G', 'TD', 'lgMF','Ad', 'Std', 'Vd', 'Pd', 'K2O_Na2O']
+        plt.rcParams['font.sans-serif'] = ['SimHei']
+        fig = plt.figure(figsize=(16,16))
+        fig.suptitle(coal_Kind+'各主要指标质量变化趋势')#, fontsize=18)
+        for i in range(len(maincols)):
+            specificY = df[df.年份 == '1999-2002'].loc[1,maincols[i]]
+            #print(specificY)
+            ax = plt.subplot(3, 4, i+1)     # 设置子图位置。总从3行，4列。从上往下，从左往右，第i+1个子图
+            ax.set_xlabel('时间段/年份')     # 设置X轴标题
+            ax.set_ylabel(maincols[i])      # 设置Y轴标题
+            plt.xticks(xlocs,xlabels,rotation=90)       # 设置X轴刻度文本
+            #plt.scatter(df.index,df[maincols[i]], label='1999-2002年间数据',s=50, marker='p', color='red')
+            plt.plot(df.index,df[maincols[i]],linestyle='dashed', marker='o',label=maincols[i])
+            plt.scatter(1,specificY, label='1999-2002年间数据',s=100, marker='p', color='red')
+            ax.legend(loc='lower right')  # 设置图例，自动选择位置
+        plt.subplots_adjust(wspace=0.3, hspace=0.8)     # 调整子图间的间距
         plt.show()
 
     ######## Slot functions #############
