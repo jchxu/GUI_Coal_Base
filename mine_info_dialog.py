@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mine_info_dialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.2
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -30,20 +30,20 @@ class Ui_mine_info_dialog(object):
         self.label_4 = QtWidgets.QLabel(mine_info_dialog)
         self.label_4.setGeometry(QtCore.QRect(20, 180, 200, 60))
         self.label_4.setText("")
-        self.label_4.setPixmap(QtGui.QPixmap("../../../Pictures/中国煤炭市场网logo_03.jpg"))
+        self.label_4.setPixmap(QtGui.QPixmap("cctd.png"))
         self.label_4.setScaledContents(True)
         self.label_4.setObjectName("label_4")
         self.label_5 = QtWidgets.QLabel(mine_info_dialog)
         self.label_5.setGeometry(QtCore.QRect(20, 20, 200, 60))
         self.label_5.setText("")
-        self.label_5.setPixmap(QtGui.QPixmap("../../../Pictures/国家煤炭工业网logo.jpg"))
+        self.label_5.setPixmap(QtGui.QPixmap("coalchina.png"))
         self.label_5.setScaledContents(True)
         self.label_5.setOpenExternalLinks(True)
         self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(mine_info_dialog)
         self.label_6.setGeometry(QtCore.QRect(20, 100, 200, 60))
         self.label_6.setText("")
-        self.label_6.setPixmap(QtGui.QPixmap("../../../Pictures/中国煤炭资源网logo.png"))
+        self.label_6.setPixmap(QtGui.QPixmap("sxcoal.png"))
         self.label_6.setScaledContents(True)
         self.label_6.setObjectName("label_6")
 
