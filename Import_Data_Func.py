@@ -33,7 +33,7 @@ def read_data(self,datafiles):     #GUI程序用
             df = pd.read_csv(file)
             dflist.append(df)
             file.close()
-    dfs = pd.concat(dflist, ignore_index=True)
+    dfs = pd.concat(dflist, ignore_index=True, sort=False)
     return dfs
 
 ### 获取基础煤种的原始数据
@@ -78,7 +78,7 @@ def get_Base_coal(dfs):
     for item in base_name:
         df_name = dfs[(dfs['煤名称'] == item)]
         dflist.append(df_name)
-    base_dfs = pd.concat(dflist, ignore_index=True)
+    base_dfs = pd.concat(dflist, ignore_index=True, sort=False)
     new_indexs=['入选原因']
     base_dfs2 = pd.concat([base_dfs, pd.DataFrame(columns=new_indexs)], sort=False)
     for index, row in base_dfs2.iterrows():
