@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 import sys
-
+pd.set_option('display.max_columns', None)
 ### 进度条相关
 def report_progress(progress, total):
     ratio = progress / float(total)
@@ -503,7 +503,9 @@ def init_level(dfs):        #测试程序用
         dfs.loc[index,'灰分分级'] = get_Ash_level(row.煤种,row.Ad)
         dfs.loc[index,'热强度分级'] = get_HotStrength_level(row.煤种,row.CSR)
         dfs.loc[index,'硬煤分类'] = get_Hard_level(row.Vd,row.lgMF,row.TD)
+    for index, row in dfs.iterrows():
         dfs.loc[index,'煤质分级'] = get_CoalQuality_level(row.煤种,row.硫分分级,row.灰分分级,row.CRI,row.CSR,row.DI150_15,row.Y,row.G,row.TD,row.lgMF,row.Ad,row.Std,row.Vd,row.Pd,row.K2O_Na2O)
+    for index, row in dfs.iterrows():
         dfs.loc[index,'煤质分级'] = update_CoalQuality_level(row.硫分分级,row.灰分分级,row.热强度分级,row.硬煤分类,row.煤质分级)
         #report_progress(index, len(dfs.index))
     #report_progress_done()
