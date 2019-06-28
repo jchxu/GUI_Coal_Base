@@ -40,8 +40,18 @@ def read_data(self,datafiles):     #GUI程序用
 def numformat(itemvalue):
     pattern = re.compile(r'^[-+]?[-0-9]\d*\.\d*|[-+]?\.?[0-9]\d*$')
     result = pattern.match(itemvalue)
+    pattern2 = re.compile(r'^[12]')
+    result2 = pattern2.match(itemvalue)
     if result:
-        floatvalue = ("%.1f" % float(itemvalue))
+        if ('.' in itemvalue):
+            if (int(itemvalue.split('.')[1])==0) and (len(itemvalue.split('.')[0])==4):
+                floatvalue = str(int(itemvalue.split('.')[0]))      #年份.0
+            else:
+                floatvalue = ("%.1f" % float(itemvalue))    #有小数点，但.后0和.前4位数字不同符合
+        elif (len(itemvalue) == 4) and (result2):
+            floatvalue = ("%d" % float(itemvalue))      #没有小数点，总共4位,以1或2开头
+        else:
+            floatvalue = ("%.1f" % float(itemvalue))    #没有小数点，位数非4位
         return floatvalue
     else: return itemvalue
 
