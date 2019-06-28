@@ -152,15 +152,15 @@ def get_S_level(coal_kind,coal_Std):
     elif (coal_kind == '肥煤') or (coal_kind == '1/3焦煤'):
         if (coal_Std < 0.4):  return ('特低')
         elif (0.4 <= coal_Std < 0.7):  return ('低')
-        elif (0.7 <= coal_Std < 1.2):  return ('中')
-        elif (1.2 <= coal_Std <= 1.8):  return ('高')
-        elif (coal_Std > 1.8):  return ('特高')
+        elif (0.7 <= coal_Std < 1.0):  return ('中')
+        elif (1.0 <= coal_Std <= 2.0):  return ('高')
+        elif (coal_Std > 2.0):  return ('特高')
     elif (coal_kind == '气煤'):
         if (coal_Std < 0.4):  return ('特低')
         elif (0.4 <= coal_Std < 0.6):  return ('低')
-        elif (0.6 <= coal_Std < 0.7):  return ('中')
-        elif (0.7 <= coal_Std <= 0.9):  return ('高')
-        elif (coal_Std > 0.9):  return ('特高')
+        elif (0.6 <= coal_Std < 0.8):  return ('中')
+        elif (0.8 <= coal_Std <= 1.0):  return ('高')
+        elif (coal_Std > 1.0):  return ('特高')
     elif (coal_kind == '瘦煤'):
         if (coal_Std < 0.4):  return ('特低')
         elif (0.4 <= coal_Std < 0.6):  return ('低')
@@ -175,27 +175,27 @@ def get_Ash_level(coal_kind,coal_Ad):
     if (coal_kind == '焦煤') or (coal_kind == '瘦煤'):
         if (coal_Ad < 8):  return ('特低')
         elif (8 <= coal_Ad < 9):  return ('低')
-        elif (9 <= coal_Ad < 10):  return ('中')
-        elif (10 <= coal_Ad <= 11.5):  return ('高')
+        elif (9 <= coal_Ad < 10.5):  return ('中')
+        elif (10.5 <= coal_Ad <= 11.5):  return ('高')
         elif (coal_Ad > 11.5):  return ('特高')
     elif (coal_kind == '肥煤'):
-        if (coal_Ad < 7):  return ('特低')
-        elif (7 <= coal_Ad < 9):  return ('低')
-        elif (9 <= coal_Ad < 10):  return ('中')
-        elif (10 <= coal_Ad <= 11.5):  return ('高')
+        if (coal_Ad < 8):  return ('特低')
+        elif (8 <= coal_Ad < 9):  return ('低')
+        elif (9 <= coal_Ad < 10.5):  return ('中')
+        elif (10.5 <= coal_Ad <= 11.5):  return ('高')
         elif (coal_Ad > 11.5):  return ('特高')
     elif (coal_kind == '1/3焦煤'):
-        if (coal_Ad < 5):  return ('特低')
-        elif (5 <= coal_Ad < 7):  return ('低')
-        elif (7 <= coal_Ad < 8):  return ('中')
-        elif (8 <= coal_Ad <= 10):  return ('高')
-        elif (coal_Ad > 10):  return ('特高')
+        if (coal_Ad < 7.5):  return ('特低')
+        elif (7.5 <= coal_Ad < 8.5):  return ('低')
+        elif (8.5 <= coal_Ad < 9.5):  return ('中')
+        elif (9.5 <= coal_Ad <= 10.5):  return ('高')
+        elif (coal_Ad > 10.5):  return ('特高')
     elif (coal_kind == '气煤'):
-        if (coal_Ad < 6):  return ('特低')
-        elif (6 <= coal_Ad < 7):  return ('低')
-        elif (7 <= coal_Ad < 8):  return ('中')
-        elif (8 <= coal_Ad <= 9):  return ('高')
-        elif (coal_Ad > 9):  return ('特高')
+        if (coal_Ad < 7):  return ('特低')
+        elif (7 <= coal_Ad < 7.5):  return ('低')
+        elif (7.5 <= coal_Ad < 8.5):  return ('中')
+        elif (8.5 <= coal_Ad <= 9.5):  return ('高')
+        elif (coal_Ad > 9.5):  return ('特高')
     else:
         return ('煤种未知')
 
@@ -286,9 +286,16 @@ def get_score(flag,lowvalue,highvalue,value):
         if (value >= high_cutoff): return 100
         elif (value >= low_cutoff): return 70
         elif (value < low_cutoff): return 40
+### 根据灰分、硫分指标等级打分
+def get_score_level(level):
+    if (level == '特低'): return 110
+    elif (level == '低'): return 100
+    elif (level == '中'): return 70
+    elif (level == '高'): return 40
+    elif (level == '特高'): return 10
 
 ### 根据若干指标计算煤质分级
-def get_CoalQuality_level(coal_kind,coal_CRI,coal_CSR,coal_DI,coal_Y,coal_G,coal_TD,coal_lgMF,coal_Ad,coal_Std,coal_Vd,coal_Pd,coal_K2O):
+def get_CoalQuality_level(coal_kind,Std_level,Ash_level,coal_CRI,coal_CSR,coal_DI,coal_Y,coal_G,coal_TD,coal_lgMF,coal_Ad,coal_Std,coal_Vd,coal_Pd,coal_K2O):
     if (coal_kind == '焦煤'):
         score_CRI = get_score('small',15.7,30.3,coal_CRI)
         score_CSR = get_score('big',56.6,74.0,coal_CSR)
@@ -297,8 +304,8 @@ def get_CoalQuality_level(coal_kind,coal_CRI,coal_CSR,coal_DI,coal_Y,coal_G,coal
         score_G = get_score('big',72.3,86.0,coal_G)
         score_TD = get_score('big',27.4,104.0,coal_TD)
         score_lgMF = get_score('big',1.37,3.25,coal_lgMF)
-        score_Ad = get_score('small',8.88,10.97,coal_Ad)
-        score_Std = get_score('small',0.39,1.22,coal_Std)
+        score_Ad = get_score_level(Ash_level)
+        score_Std = get_score_level(Std_level)
         score_Vd = get_score('small',17.4,25.2,coal_Vd)
         score_Pd = get_score('small',0.008,0.076,coal_Pd)
         score_K2O = get_score('small',0.73,2.52,coal_K2O)
@@ -310,8 +317,8 @@ def get_CoalQuality_level(coal_kind,coal_CRI,coal_CSR,coal_DI,coal_Y,coal_G,coal
         score_G = get_score('big',86.0,94.0,coal_G)
         score_TD = get_score('big',142.0,266.0,coal_TD)
         score_lgMF = get_score('big',3.3,4.4,coal_lgMF)
-        score_Ad = get_score('small',7.0,11.8,coal_Ad)
-        score_Std = get_score('small',0.30,2.30,coal_Std)
+        score_Ad = get_score_level(Ash_level)
+        score_Std = get_score_level(Std_level)
         score_Vd = get_score('small',23.0,30.0,coal_Vd)
         score_Pd = get_score('small',0.009,0.063,coal_Pd)
         score_K2O = get_score('small',0.53,2.85,coal_K2O)
@@ -323,8 +330,8 @@ def get_CoalQuality_level(coal_kind,coal_CRI,coal_CSR,coal_DI,coal_Y,coal_G,coal
         score_G = get_score('big',80.0,92.5,coal_G)
         score_TD = get_score('big',92.0,237.0,coal_TD)
         score_lgMF = get_score('big',2.05,4.68,coal_lgMF)
-        score_Ad = get_score('small',3.40,9.85,coal_Ad)
-        score_Std = get_score('small',0.41,2.15,coal_Std)
+        score_Ad = get_score_level(Ash_level)
+        score_Std = get_score_level(Std_level)
         score_Vd = get_score('small',26.0,39.0,coal_Vd)
         score_Pd = get_score('small',0.003,0.045,coal_Pd)
         score_K2O = get_score('small',0.72,3.54,coal_K2O)
@@ -336,24 +343,24 @@ def get_CoalQuality_level(coal_kind,coal_CRI,coal_CSR,coal_DI,coal_Y,coal_G,coal
         score_G = get_score('big',61.0,87.0,coal_G)
         score_TD = get_score('big',4.0,115.0,coal_TD)
         score_lgMF = get_score('big',1.13,3.76,coal_lgMF)
-        score_Ad = get_score('small',6.80,9.00,coal_Ad)
-        score_Std = get_score('small',0.26,0.70,coal_Std)
+        score_Ad = get_score_level(Ash_level)
+        score_Std = get_score_level(Std_level)
         score_Vd = get_score('small',32.0,36.5,coal_Vd)
         score_Pd = get_score('small',0.005,0.042,coal_Pd)
         score_K2O = get_score('small',0.95,3.57,coal_K2O)
     elif (coal_kind == '瘦煤'):
-        score_CRI = get_score('small',24.0,28.0,coal_CRI)
-        score_CSR = get_score('big',30.0,37.0,coal_CSR)
-        score_DI = get_score('big',40.0,59.0,coal_DI)
-        score_Y = get_score('big',5.0,7.0,coal_Y)
-        score_G = get_score('big',29.0,56.0,coal_G)
-        score_TD = get_score('big',2.0,2.0,coal_TD)
-        score_lgMF = get_score('big',0,0.3,coal_lgMF)
-        score_Ad = get_score('small',9.5,11.5,coal_Ad)
-        score_Std = get_score('small',0.37,0.85,coal_Std)
-        score_Vd = get_score('small',14.2,15.2,coal_Vd)
+        score_CRI = get_score('small',17.0,43.0,coal_CRI)
+        score_CSR = get_score('big',30.0,62.0,coal_CSR)
+        score_DI = get_score('big',34.0,84.0,coal_DI)
+        score_Y = get_score('big',5.0,12.0,coal_Y)
+        score_G = get_score('big',29.0,79.0,coal_G)
+        score_TD = get_score('big',40.0,40.0,coal_TD)
+        score_lgMF = get_score('big',0,1.76,coal_lgMF)
+        score_Ad = get_score_level(Ash_level)
+        score_Std = get_score_level(Std_level)
+        score_Vd = get_score('small',14.2,18.6,coal_Vd)
         score_Pd = get_score('small',0.002,0.043,coal_Pd)
-        score_K2O = get_score('small',0.65,1.74,coal_K2O)
+        score_K2O = get_score('small',0.61,1.74,coal_K2O)
     mean_score = np.mean([score_CRI,score_CSR,score_DI,score_Y,score_G,score_TD,score_lgMF,score_Ad,score_Std,score_Vd,score_Pd,score_K2O])
     if (mean_score > 80): return '优质'
     elif (60 <= mean_score <= 80): return '中等'
@@ -496,7 +503,7 @@ def init_level(dfs):        #测试程序用
         dfs.loc[index,'灰分分级'] = get_Ash_level(row.煤种,row.Ad)
         dfs.loc[index,'热强度分级'] = get_HotStrength_level(row.煤种,row.CSR)
         dfs.loc[index,'硬煤分类'] = get_Hard_level(row.Vd,row.lgMF,row.TD)
-        dfs.loc[index,'煤质分级'] = get_CoalQuality_level(row.煤种,row.CRI,row.CSR,row.DI150_15,row.Y,row.G,row.TD,row.lgMF,row.Ad,row.Std,row.Vd,row.Pd,row.K2O_Na2O)
+        dfs.loc[index,'煤质分级'] = get_CoalQuality_level(row.煤种,row.硫分分级,row.灰分分级,row.CRI,row.CSR,row.DI150_15,row.Y,row.G,row.TD,row.lgMF,row.Ad,row.Std,row.Vd,row.Pd,row.K2O_Na2O)
         dfs.loc[index,'煤质分级'] = update_CoalQuality_level(row.硫分分级,row.灰分分级,row.热强度分级,row.硬煤分类,row.煤质分级)
         #report_progress(index, len(dfs.index))
     #report_progress_done()

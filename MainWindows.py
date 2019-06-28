@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainWindows.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.2
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -74,7 +74,7 @@ class Ui_MainWindow(object):
         self.label.setMinimumSize(QtCore.QSize(160, 160))
         self.label.setMaximumSize(QtCore.QSize(100, 100))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("../../../Pictures/主库.jpg"))
+        self.label.setPixmap(QtGui.QPixmap("主库.jpg"))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
@@ -83,7 +83,7 @@ class Ui_MainWindow(object):
         self.label_3.setMinimumSize(QtCore.QSize(160, 160))
         self.label_3.setMaximumSize(QtCore.QSize(100, 100))
         self.label_3.setText("")
-        self.label_3.setPixmap(QtGui.QPixmap("../../../Pictures/基础煤种.jpg"))
+        self.label_3.setPixmap(QtGui.QPixmap("基础煤种.jpg"))
         self.label_3.setScaledContents(True)
         self.label_3.setObjectName("label_3")
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
@@ -92,7 +92,7 @@ class Ui_MainWindow(object):
         self.label_4.setMinimumSize(QtCore.QSize(160, 160))
         self.label_4.setMaximumSize(QtCore.QSize(100, 100))
         self.label_4.setText("")
-        self.label_4.setPixmap(QtGui.QPixmap("../../../Pictures/经典煤.jpg"))
+        self.label_4.setPixmap(QtGui.QPixmap("经典煤.jpg"))
         self.label_4.setScaledContents(True)
         self.label_4.setObjectName("label_4")
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
@@ -101,7 +101,7 @@ class Ui_MainWindow(object):
         self.label_5.setMinimumSize(QtCore.QSize(160, 160))
         self.label_5.setMaximumSize(QtCore.QSize(100, 100))
         self.label_5.setText("")
-        self.label_5.setPixmap(QtGui.QPixmap("../../../Pictures/趋势.jpg"))
+        self.label_5.setPixmap(QtGui.QPixmap("趋势.jpg"))
         self.label_5.setScaledContents(True)
         self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
@@ -110,7 +110,7 @@ class Ui_MainWindow(object):
         self.label_6.setMinimumSize(QtCore.QSize(160, 160))
         self.label_6.setMaximumSize(QtCore.QSize(100, 100))
         self.label_6.setText("")
-        self.label_6.setPixmap(QtGui.QPixmap("../../../Pictures/新煤.jpg"))
+        self.label_6.setPixmap(QtGui.QPixmap("新煤.jpg"))
         self.label_6.setScaledContents(True)
         self.label_6.setObjectName("label_6")
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
@@ -119,7 +119,7 @@ class Ui_MainWindow(object):
         self.label_7.setMinimumSize(QtCore.QSize(160, 160))
         self.label_7.setMaximumSize(QtCore.QSize(100, 100))
         self.label_7.setText("")
-        self.label_7.setPixmap(QtGui.QPixmap("../../../Pictures/矿山.jpg"))
+        self.label_7.setPixmap(QtGui.QPixmap("矿山.jpg"))
         self.label_7.setScaledContents(True)
         self.label_7.setObjectName("label_7")
         self.label_8 = QtWidgets.QLabel(self.centralwidget)

@@ -83,7 +83,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>../../../Pictures/中国煤炭市场网logo_03.jpg</pixmap>
+    <pixmap>../../../Picture/中国煤炭市场网logo_03.jpg</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -102,7 +102,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>../../../Pictures/国家煤炭工业网logo.jpg</pixmap>
+    <pixmap>../../../Picture/国家煤炭工业网logo.jpg</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -124,7 +124,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>../../../Pictures/中国煤炭资源网logo.png</pixmap>
+    <pixmap>../../../Picture/中国煤炭资源网logo.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>

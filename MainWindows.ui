@@ -168,7 +168,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../Pictures/主库.jpg</pixmap>
+     <pixmap>主库.jpg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -205,7 +205,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../Pictures/基础煤种.jpg</pixmap>
+     <pixmap>基础煤种.jpg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -242,7 +242,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../Pictures/经典煤.jpg</pixmap>
+     <pixmap>经典煤.jpg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -279,7 +279,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../Pictures/趋势.jpg</pixmap>
+     <pixmap>趋势.jpg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -316,7 +316,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../Pictures/新煤.jpg</pixmap>
+     <pixmap>新煤.jpg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -353,7 +353,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../Pictures/矿山.jpg</pixmap>
+     <pixmap>矿山.jpg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
