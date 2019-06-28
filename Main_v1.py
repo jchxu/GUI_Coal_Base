@@ -1,6 +1,6 @@
 # coding=utf-8
 
-import sys,os
+import sys,os,re
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -145,7 +145,9 @@ class Coal_Index_Window(QDialog):
         # 表格内容填充
         for index,row in df.iterrows():
             for j in range(len(table_header)):
-                inputitem = str(row[table_header[j]])
+                #inputitem = str(row[table_header[j]])
+                itemvalue = str(row[table_header[j]])
+                inputitem = numformat(itemvalue)
                 newItem = QtWidgets.QTableWidgetItem(inputitem)
                 newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
                 self.child.result_table.setItem(index,j,newItem)
@@ -194,7 +196,8 @@ class Base_Coal_Window(QDialog):
         # 表格内容填充
         for index,row in df.iterrows():
             for j in range(len(table_header)):
-                inputitem = str(row[table_header[j]])
+                itemvalue = str(row[table_header[j]])
+                inputitem = numformat(itemvalue)
                 newItem = QtWidgets.QTableWidgetItem(inputitem)
                 newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
                 self.child.result_table.setItem(index,j,newItem)
@@ -245,7 +248,8 @@ class Classic_Coal_Window(QDialog):
         # 表格内容填充
         for index,row in df.iterrows():
             for j in range(len(table_header)):
-                inputitem = str(row[table_header[j]])
+                itemvalue = str(row[table_header[j]])
+                inputitem = numformat(itemvalue)
                 newItem = QtWidgets.QTableWidgetItem(inputitem)
                 newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
                 self.child.result_table.setItem(index,j,newItem)
@@ -294,7 +298,8 @@ class New_Coal_Window(QDialog):
         # 表格内容填充
         for index,row in df.iterrows():
             for j in range(len(table_header)):
-                inputitem = str(row[table_header[j]])
+                itemvalue = str(row[table_header[j]])
+                inputitem = numformat(itemvalue)
                 newItem = QtWidgets.QTableWidgetItem(inputitem)
                 newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
                 self.child.result_table.setItem(index,j,newItem)

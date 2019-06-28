@@ -1,7 +1,7 @@
 # coding=utf-8
 import pandas as pd
 import numpy as np
-import sys
+import sys,re
 pd.set_option('display.max_columns', None)
 ### 进度条相关
 def report_progress(progress, total):
@@ -35,6 +35,15 @@ def read_data(self,datafiles):     #GUI程序用
             file.close()
     dfs = pd.concat(dflist, ignore_index=True, sort=False)
     return dfs
+
+### 判断字符是否为数字，若为数字，则保留一位小数返回
+def numformat(itemvalue):
+    pattern = re.compile(r'^[-+]?[-0-9]\d*\.\d*|[-+]?\.?[0-9]\d*$')
+    result = pattern.match(itemvalue)
+    if result:
+        floatvalue = ("%.1f" % float(itemvalue))
+        return floatvalue
+    else: return itemvalue
 
 ### 获取基础煤种的原始数据
 #def get_Base_coal(self,dfs):
