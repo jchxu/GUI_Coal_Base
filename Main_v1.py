@@ -117,6 +117,7 @@ class Coal_Index_Window(QDialog):
         df_origin = Read_CSVData.df_origin
         df_yearregion = mean_by_yearregion(df_origin)
         df = init_level(df_yearregion)  # 5个指标分级
+        #print(df)
         df.to_csv('时间段分级数据.csv', encoding='gb2312', index=0)
         #coal_Place = self.child.comboBox_1.currentText()
         coal_Kind = self.child.comboBox_2.currentText()
@@ -166,44 +167,47 @@ class Base_Coal_Window(QDialog):
         # 获取基础煤种数据
         df_origin = Read_CSVData.df_origin
         base_dfs = get_Base_coal(df_origin)  # 获取基础煤种数据
-        base_dfs = mean_by_yearregion(base_dfs)
-        df = init_level(base_dfs)  # 5个指标分级
-        df.to_csv('基础煤种时间段分级数据.csv', encoding='gb2312', index=0)
-        # 根据下拉列表中的数值筛选数据
-        #coal_Place = self.child.comboBox_1.currentText()
-        coal_Kind = self.child.comboBox_2.currentText()
-        coal_Year = self.child.comboBox_3.currentText()
-        coal_Quality = self.child.comboBox_4.currentText()
-        coal_HotStr = self.child.comboBox_5.currentText()
-        coal_Hard = self.child.comboBox_6.currentText()
-        coal_Ash = self.child.comboBox_7.currentText()
-        coal_Std = self.child.comboBox_8.currentText()
-        #df = Read_CSVData.df_base
-        if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
-        if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
-        if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]
-        if (not coal_HotStr == '所有'): df = df[df.热强度分级 == coal_HotStr]
-        if (not coal_Hard == '所有'): df = df[df.硬煤分类 == coal_Hard]
-        if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
-        if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
-        df = df.reset_index(drop=True)
-        self.child.label_num.setText('共计%d条数据.' % len(df))
-        # 表格行数、列标题设置
-        self.child.result_table.setRowCount(len(df))
-        table_header = ['年份','国家','煤种','产地','煤名称','入选原因','煤质分级','热强度分级','硬煤分类','Ad','灰分分级','Std','硫分分级','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
-        self.child.result_table.setColumnCount(len(table_header))
-        self.child.result_table.setHorizontalHeaderLabels(table_header)
-        # 表格内容填充
-        for index,row in df.iterrows():
-            for j in range(len(table_header)):
-                itemvalue = str(row[table_header[j]])
-                inputitem = numformat(itemvalue)
-                newItem = QtWidgets.QTableWidgetItem(inputitem)
-                newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
-                self.child.result_table.setItem(index,j,newItem)
-        # 表格格式设置
-        self.child.result_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)  #选中一行
-        self.child.result_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents) #自适应调整列宽
+        if (base_dfs == 'Empty'):
+            self.child.label_num.setText('无基础煤种!')
+        else:
+            base_dfs = mean_by_yearregion(base_dfs)
+            df = init_level(base_dfs)  # 5个指标分级
+            df.to_csv('基础煤种时间段分级数据.csv', encoding='gb2312', index=0)
+            # 根据下拉列表中的数值筛选数据
+            #coal_Place = self.child.comboBox_1.currentText()
+            coal_Kind = self.child.comboBox_2.currentText()
+            coal_Year = self.child.comboBox_3.currentText()
+            coal_Quality = self.child.comboBox_4.currentText()
+            coal_HotStr = self.child.comboBox_5.currentText()
+            coal_Hard = self.child.comboBox_6.currentText()
+            coal_Ash = self.child.comboBox_7.currentText()
+            coal_Std = self.child.comboBox_8.currentText()
+            #df = Read_CSVData.df_base
+            if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
+            if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
+            if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]
+            if (not coal_HotStr == '所有'): df = df[df.热强度分级 == coal_HotStr]
+            if (not coal_Hard == '所有'): df = df[df.硬煤分类 == coal_Hard]
+            if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
+            if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
+            df = df.reset_index(drop=True)
+            self.child.label_num.setText('共计%d条数据.' % len(df))
+            # 表格行数、列标题设置
+            self.child.result_table.setRowCount(len(df))
+            table_header = ['年份','国家','煤种','产地','煤名称','入选原因','煤质分级','热强度分级','硬煤分类','Ad','灰分分级','Std','硫分分级','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
+            self.child.result_table.setColumnCount(len(table_header))
+            self.child.result_table.setHorizontalHeaderLabels(table_header)
+            # 表格内容填充
+            for index,row in df.iterrows():
+                for j in range(len(table_header)):
+                    itemvalue = str(row[table_header[j]])
+                    inputitem = numformat(itemvalue)
+                    newItem = QtWidgets.QTableWidgetItem(inputitem)
+                    newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
+                    self.child.result_table.setItem(index,j,newItem)
+            # 表格格式设置
+            self.child.result_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)  #选中一行
+            self.child.result_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents) #自适应调整列宽
 
 ### 经典煤种指标数据窗口 ###
 class Classic_Coal_Window(QDialog):
@@ -220,42 +224,45 @@ class Classic_Coal_Window(QDialog):
         allyearregiondfs = mean_by_yearregion(df_origin)
         allyearregiondfs = init_level(allyearregiondfs)   #5个指标分级
         df = get_Classic_coal(yeardfs,allyearregiondfs)  # 获取经典煤种数据
-        df.to_csv('经典煤种数据.csv', encoding='gb2312', index=0)
-        # 根据下拉列表中的数值筛选数据
-        #coal_Place = self.child.comboBox_1.currentText()
-        coal_Kind = self.child.comboBox_2.currentText()
-        coal_Year = self.child.comboBox_3.currentText()
-        coal_Quality = self.child.comboBox_8.currentText()
-        coal_HotStr = self.child.comboBox_4.currentText()
-        coal_Hard = self.child.comboBox_5.currentText()
-        coal_Ash = self.child.comboBox_6.currentText()
-        coal_Std = self.child.comboBox_7.currentText()
-        #df = Read_CSVData.df_classic
-        if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
-        if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
-        if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]
-        if (not coal_HotStr == '所有'): df = df[df.热强度分级 == coal_HotStr]
-        if (not coal_Hard == '所有'): df = df[df.硬煤分类 == coal_Hard]
-        if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
-        if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
-        df = df.reset_index(drop=True)
-        self.child.label_num.setText('共计%d条数据.' % len(df))
-        # 表格行数、列标题设置
-        self.child.result_table.setRowCount(len(df))
-        table_header = ['年份','国家','煤种','产地','煤名称','入选原因','煤质分级','热强度分级','硬煤分类','Ad','灰分分级','Std','硫分分级','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
-        self.child.result_table.setColumnCount(len(table_header))
-        self.child.result_table.setHorizontalHeaderLabels(table_header)
-        # 表格内容填充
-        for index,row in df.iterrows():
-            for j in range(len(table_header)):
-                itemvalue = str(row[table_header[j]])
-                inputitem = numformat(itemvalue)
-                newItem = QtWidgets.QTableWidgetItem(inputitem)
-                newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
-                self.child.result_table.setItem(index,j,newItem)
-        # 表格格式设置
-        self.child.result_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)  #选中一行
-        self.child.result_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents) #自适应调整列宽
+        if (df == 'Empty'):
+            self.child.label_num.setText('无经典煤种!')
+        else:
+            df.to_csv('经典煤种数据.csv', encoding='gb2312', index=0)
+            # 根据下拉列表中的数值筛选数据
+            #coal_Place = self.child.comboBox_1.currentText()
+            coal_Kind = self.child.comboBox_2.currentText()
+            coal_Year = self.child.comboBox_3.currentText()
+            coal_Quality = self.child.comboBox_8.currentText()
+            coal_HotStr = self.child.comboBox_4.currentText()
+            coal_Hard = self.child.comboBox_5.currentText()
+            coal_Ash = self.child.comboBox_6.currentText()
+            coal_Std = self.child.comboBox_7.currentText()
+            #df = Read_CSVData.df_classic
+            if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
+            if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
+            if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]
+            if (not coal_HotStr == '所有'): df = df[df.热强度分级 == coal_HotStr]
+            if (not coal_Hard == '所有'): df = df[df.硬煤分类 == coal_Hard]
+            if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
+            if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
+            df = df.reset_index(drop=True)
+            self.child.label_num.setText('共计%d条数据.' % len(df))
+            # 表格行数、列标题设置
+            self.child.result_table.setRowCount(len(df))
+            table_header = ['年份','国家','煤种','产地','煤名称','入选原因','煤质分级','热强度分级','硬煤分类','Ad','灰分分级','Std','硫分分级','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
+            self.child.result_table.setColumnCount(len(table_header))
+            self.child.result_table.setHorizontalHeaderLabels(table_header)
+            # 表格内容填充
+            for index,row in df.iterrows():
+                for j in range(len(table_header)):
+                    itemvalue = str(row[table_header[j]])
+                    inputitem = numformat(itemvalue)
+                    newItem = QtWidgets.QTableWidgetItem(inputitem)
+                    newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
+                    self.child.result_table.setItem(index,j,newItem)
+            # 表格格式设置
+            self.child.result_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)  #选中一行
+            self.child.result_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents) #自适应调整列宽
 
 
 ### 新煤种指标数据窗口 ###
@@ -269,43 +276,46 @@ class New_Coal_Window(QDialog):
         ## 获取新煤种数据
         df_origin = Read_CSVData.df_origin
         new_dfs = get_New_coal(df_origin)  # 获取新煤种数据
-        df = init_level(new_dfs)  # 5个指标分级
-        df.to_csv('新煤种数据.csv', encoding='gb2312', index=0)
-        #coal_Place = self.child.comboBox_1.currentText()
-        coal_Kind = self.child.comboBox_2.currentText()
-        coal_Year = self.child.comboBox_3.currentText()
-        coal_Quality = self.child.comboBox_8.currentText()
-        coal_HotStr = self.child.comboBox_4.currentText()
-        coal_Hard = self.child.comboBox_5.currentText()
-        coal_Ash = self.child.comboBox_6.currentText()
-        coal_Std = self.child.comboBox_7.currentText()
-        # 根据下拉列表中的数值筛选数据
-        #df = Read_CSVData.df_new
-        if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
-        if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
-        if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]
-        if (not coal_HotStr == '所有'): df = df[df.热强度分级 == coal_HotStr]
-        if (not coal_Hard == '所有'): df = df[df.硬煤分类 == coal_Hard]
-        if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
-        if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
-        df = df.reset_index(drop=True)
-        self.child.label_num.setText('共计%d条数据.' % len(df))
-        # 表格行数、列标题设置
-        self.child.result_table.setRowCount(len(df))
-        table_header = ['年份','国家','煤种','产地','煤名称','煤质分级','热强度分级','硬煤分类','Ad','灰分分级','Std','硫分分级','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
-        self.child.result_table.setColumnCount(len(table_header))
-        self.child.result_table.setHorizontalHeaderLabels(table_header)
-        # 表格内容填充
-        for index,row in df.iterrows():
-            for j in range(len(table_header)):
-                itemvalue = str(row[table_header[j]])
-                inputitem = numformat(itemvalue)
-                newItem = QtWidgets.QTableWidgetItem(inputitem)
-                newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
-                self.child.result_table.setItem(index,j,newItem)
-        # 表格格式设置
-        self.child.result_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)  #选中一行
-        self.child.result_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents) #自适应调整列宽
+        if (new_dfs == 'Empty'):
+            self.child.label_num.setText('无新煤种!')
+        else:
+            df = init_level(new_dfs)  # 5个指标分级
+            df.to_csv('新煤种数据.csv', encoding='gb2312', index=0)
+            #coal_Place = self.child.comboBox_1.currentText()
+            coal_Kind = self.child.comboBox_2.currentText()
+            coal_Year = self.child.comboBox_3.currentText()
+            coal_Quality = self.child.comboBox_8.currentText()
+            coal_HotStr = self.child.comboBox_4.currentText()
+            coal_Hard = self.child.comboBox_5.currentText()
+            coal_Ash = self.child.comboBox_6.currentText()
+            coal_Std = self.child.comboBox_7.currentText()
+            # 根据下拉列表中的数值筛选数据
+            #df = Read_CSVData.df_new
+            if (not coal_Kind == '所有'): df = df[df.煤种 == coal_Kind]
+            if (not coal_Year == '所有'): df = df[df.年份 == coal_Year]
+            if (not coal_Quality == '所有'): df = df[df.煤质分级 == coal_Quality]
+            if (not coal_HotStr == '所有'): df = df[df.热强度分级 == coal_HotStr]
+            if (not coal_Hard == '所有'): df = df[df.硬煤分类 == coal_Hard]
+            if (not coal_Ash == '所有'): df = df[df.灰分分级 == coal_Ash]
+            if (not coal_Std == '所有'): df = df[df.硫分分级 == coal_Std]
+            df = df.reset_index(drop=True)
+            self.child.label_num.setText('共计%d条数据.' % len(df))
+            # 表格行数、列标题设置
+            self.child.result_table.setRowCount(len(df))
+            table_header = ['年份','国家','煤种','产地','煤名称','煤质分级','热强度分级','硬煤分类','Ad','灰分分级','Std','硫分分级','Vd','CRI','CSR','lgMF','TD','DI150_15','M40_M10','Y','X','G','Rr','TI','Pd','K2O_Na2O','内水分','粒级分布','元素分析','堆密度','灰成分','发热量','全水分']        #df.columns.values.tolist()
+            self.child.result_table.setColumnCount(len(table_header))
+            self.child.result_table.setHorizontalHeaderLabels(table_header)
+            # 表格内容填充
+            for index,row in df.iterrows():
+                for j in range(len(table_header)):
+                    itemvalue = str(row[table_header[j]])
+                    inputitem = numformat(itemvalue)
+                    newItem = QtWidgets.QTableWidgetItem(inputitem)
+                    newItem.setTextAlignment(0x0004|0x0080)   #水平/垂直居中
+                    self.child.result_table.setItem(index,j,newItem)
+            # 表格格式设置
+            self.child.result_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)  #选中一行
+            self.child.result_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents) #自适应调整列宽
 
 ### 煤矿/矿山信息窗口 ###
 class Mine_Info_Window(QDialog):
@@ -325,34 +335,44 @@ class Index_Trend_Window(QDialog):
         # 获取分时间质量变化数据
         df_origin = Read_CSVData.df_origin
         df_3years = df_origin[df_origin.年份 >= 2016]
-        df_3years = mean_by_year(df_3years)
+        if not (df_3years.empty):
+            df_3years = mean_by_year(df_3years)
         df_yearregion = df_origin[df_origin.年份 <2016]
-        df_yearregion = mean_by_yearregion(df_yearregion)
-        df = pd.concat([df_yearregion,df_3years],ignore_index=True,sort=False)
-        df.to_csv('质量变化趋势.csv', encoding='gb2312', index=0)
-        # 根据下拉列表中的数值筛选数据
-        coal_Kind = self.child.comboBox_2.currentText()
-        df = df[df.煤种 == coal_Kind]
-        xlocs = df.index.tolist()
-        xlabels = []
-        for item in df['年份'].tolist():
-            xlabels.append(str(item))
-        # 绘图
-        maincols = ['CRI', 'CSR', 'DI150_15','Y','G', 'TD', 'lgMF','Ad', 'Std', 'Vd', 'Pd', 'K2O_Na2O']
-        plt.rcParams['font.sans-serif'] = ['SimHei']
-        fig = plt.figure(figsize=(16,16))
-        fig.suptitle(coal_Kind+'各主要指标质量变化趋势')#, fontsize=18)
-        for i in range(len(maincols)):
-            specificY = df[df.年份 == '1999-2002'].loc[1,maincols[i]]
-            ax = plt.subplot(3, 4, i+1)     # 设置子图位置。总从3行，4列。从上往下，从左往右，第i+1个子图
-            ax.set_xlabel('时间段/年份')     # 设置X轴标题
-            ax.set_ylabel(maincols[i])      # 设置Y轴标题
-            plt.xticks(xlocs,xlabels,rotation=90)       # 设置X轴刻度文本
-            plt.plot(df.index,df[maincols[i]],linestyle='dashed', marker='o',label=maincols[i],zorder=1)
-            plt.scatter(1,specificY, label='1999-2002年间数据',s=100, marker='p', color='red',zorder=2)
-            ax.legend(loc='lower right')  # 设置图例，自动选择位置
-        plt.subplots_adjust(wspace=0.3, hspace=0.8)     # 调整子图间的间距
-        plt.show()
+        if not (df_yearregion.empty):
+            df_yearregion = mean_by_yearregion(df_yearregion)
+        if (not (df_3years.empty)) and (not (df_yearregion.empty)):
+            df = pd.concat([df_yearregion,df_3years],ignore_index=True,sort=False)
+        elif (df_3years.empty) and (df_yearregion.empty):
+            print('无数据！')
+        elif (df_3years.empty):
+            df = df_yearregion
+        elif (df_yearregion.empty):
+            df = df_3years
+        if not (df.empty):
+            df.to_csv('质量变化趋势.csv', encoding='gb2312', index=0)
+            # 根据下拉列表中的数值筛选数据
+            coal_Kind = self.child.comboBox_2.currentText()
+            df = df[df.煤种 == coal_Kind]
+            xlocs = df.index.tolist()
+            xlabels = []
+            for item in df['年份'].tolist():
+                xlabels.append(str(item))
+            # 绘图
+            maincols = ['CRI', 'CSR', 'DI150_15','Y','G', 'TD', 'lgMF','Ad', 'Std', 'Vd', 'Pd', 'K2O_Na2O']
+            plt.rcParams['font.sans-serif'] = ['SimHei']
+            fig = plt.figure(figsize=(16,16))
+            fig.suptitle(coal_Kind+'各主要指标质量变化趋势')#, fontsize=18)
+            for i in range(len(maincols)):
+                specificY = df[df.年份 == '1999-2002'].loc[1,maincols[i]]
+                ax = plt.subplot(3, 4, i+1)     # 设置子图位置。总从3行，4列。从上往下，从左往右，第i+1个子图
+                ax.set_xlabel('时间段/年份')     # 设置X轴标题
+                ax.set_ylabel(maincols[i])      # 设置Y轴标题
+                plt.xticks(xlocs,xlabels,rotation=90)       # 设置X轴刻度文本
+                plt.plot(df.index,df[maincols[i]],linestyle='dashed', marker='o',label=maincols[i],zorder=1)
+                plt.scatter(1,specificY, label='1999-2002年间数据',s=100, marker='p', color='red',zorder=2)
+                ax.legend(loc='lower right')  # 设置图例，自动选择位置
+            plt.subplots_adjust(wspace=0.3, hspace=0.8)     # 调整子图间的间距
+            plt.show()
 
     ######## Slot functions #############
 

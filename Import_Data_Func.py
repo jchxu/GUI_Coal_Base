@@ -97,27 +97,32 @@ def get_Base_coal(dfs):
     for item in base_name:
         df_name = dfs[(dfs['煤名称'] == item)]
         dflist.append(df_name)
-    base_dfs = pd.concat(dflist, ignore_index=True, sort=False)
-    new_indexs=['入选原因']
-    base_dfs2 = pd.concat([base_dfs, pd.DataFrame(columns=new_indexs)], sort=False)
-    for index, row in base_dfs2.iterrows():
-        base_dfs2.loc[index, '入选原因'] = base_reason[row.煤名称]
-    return base_dfs2
+    if len(dflist)>0:
+        base_dfs = pd.concat(dflist, ignore_index=True, sort=False)
+        new_indexs=['入选原因']
+        base_dfs2 = pd.concat([base_dfs, pd.DataFrame(columns=new_indexs)], sort=False)
+        for index, row in base_dfs2.iterrows():
+            base_dfs2.loc[index, '入选原因'] = base_reason[row.煤名称]
+        return base_dfs2
+    else:
+        return 'Empty'
 
 ### 获取经典煤种数据
 #def get_Classic_coal(self, dfs, yeardfs, alldfs):
 def get_Classic_coal(yeardfs, alldfs):
     #1999-2002年间使用的煤种
     classic_dfs1= yeardfs[(yeardfs.年份 >= 1999) & (yeardfs.年份 <= 2002)]
-    classic_dfs1 = pd.concat([classic_dfs1, pd.DataFrame(columns=['入选原因'])], sort=False)
-    for index,row in classic_dfs1.iterrows():
-        classic_dfs1.loc[index, '入选原因'] = '1999-2002年间使用的煤种'
+    if not (classic_dfs1.empty):
+        classic_dfs1 = pd.concat([classic_dfs1, pd.DataFrame(columns=['入选原因'])], sort=False)
+        for index,row in classic_dfs1.iterrows():
+            classic_dfs1.loc[index, '入选原因'] = '1999-2002年间使用的煤种'
    #煤质分级为特等的煤种
     classic_dfs2 = alldfs[(alldfs.煤质分级 == '特等') & (alldfs.年份 != '1999-2002')]
-    classic_dfs2 = pd.concat([classic_dfs2, pd.DataFrame(columns=['入选原因'])], sort=False)
-    if len(classic_dfs2) > 0:
-        for index, row in classic_dfs2.iterrows():
-            classic_dfs2.loc[index, '入选原因'] = '煤质分级为特等的煤种'
+    if not (classic_dfs2.empty):
+        classic_dfs2 = pd.concat([classic_dfs2, pd.DataFrame(columns=['入选原因'])], sort=False)
+        if len(classic_dfs2) > 0:
+            for index, row in classic_dfs2.iterrows():
+                classic_dfs2.loc[index, '入选原因'] = '煤质分级为特等的煤种'
     #分煤种、分时间段主要指标排名前3的煤种
     dflist = []
     maincols = ['CRI', 'CSR', 'DI150_15','Y','G', 'TD', 'lgMF','Ad', 'Std', 'Vd', 'Pd', 'K2O_Na2O']
@@ -126,34 +131,61 @@ def get_Classic_coal(yeardfs, alldfs):
         colorder[item] = False
     for item in ['CRI','Ad','Std','Vd','Pd','K2O_Na2O']:
         colorder[item] = True
-    classic_dfs31 = yeardfs[(yeardfs.年份 >= 2016)]
-    for col in maincols:
-        df = classic_dfs31.sort_values(ascending = colorder[col],by=col)
-        df = pd.concat([df, pd.DataFrame(columns=['入选原因'])], sort=False)
-        if len(df) > 0:
-            for index, row in df.iterrows():
-                df.loc[index, '入选原因'] = '近三年'+col+'指标排序前三'
-        if len(df) > 3:
-            dflist.append(df[0:3])
-        else:
-            dflist.append(df)
-    years_region = ['1985-1990','1991-1995','1996-1998','2003-2005','2006-2010','2011-2015']
-    classic_dfs32 = alldfs[(alldfs.年份 != '2016至今') & (alldfs.年份 != '1999-2002')]
-    for year in years_region:
-        dfyearregion = classic_dfs32[classic_dfs32.年份 == year]
+    classic_dfs31 = yeardfs[(yeardfs.年份 >= 2019)]
+    if not (classic_dfs31.empty):
         for col in maincols:
-            df = dfyearregion.sort_values(ascending=colorder[col], by=col)
+            df = classic_dfs31.sort_values(ascending = colorder[col],by=col)
             df = pd.concat([df, pd.DataFrame(columns=['入选原因'])], sort=False)
             if len(df) > 0:
                 for index, row in df.iterrows():
-                    df.loc[index, '入选原因'] = year+'年间'+col+'指标排序前三'
+                    df.loc[index, '入选原因'] = '近三年'+col+'指标排序前三'
             if len(df) > 3:
                 dflist.append(df[0:3])
             else:
                 dflist.append(df)
-    classic_dfs3 = pd.concat(dflist, ignore_index=True,sort=False)
-    classic_dfs = pd.concat([classic_dfs1,classic_dfs2,classic_dfs3], ignore_index=True, sort=False)
-    return classic_dfs
+    years_region = ['1985-1990','1991-1995','1996-1998','2003-2005','2006-2010','2011-2015']
+    classic_dfs32 = alldfs[(alldfs.年份 != '2016至今') & (alldfs.年份 != '1999-2002')]
+    if not (classic_dfs32.empty):
+        for year in years_region:
+            dfyearregion = classic_dfs32[classic_dfs32.年份 == year]
+            for col in maincols:
+                df = dfyearregion.sort_values(ascending=colorder[col], by=col)
+                df = pd.concat([df, pd.DataFrame(columns=['入选原因'])], sort=False)
+                if len(df) > 0:
+                    for index, row in df.iterrows():
+                        df.loc[index, '入选原因'] = year+'年间'+col+'指标排序前三'
+                if len(df) > 3:
+                    dflist.append(df[0:3])
+                else:
+                    dflist.append(df)
+    if len(dflist)>0:
+        classic_dfs3 = pd.concat(dflist, ignore_index=True,sort=False)
+    #判断3个条件是否全为空
+    if (classic_dfs1.empty):    #1空
+        if (classic_dfs2.empty):  #1空2空
+            if len(dflist)>0:   #1空2空3不空
+                classic_dfs = classic_dfs3
+            else:   #1空2空3空
+                return 'Empty'
+        else:   #1空2不空
+            if len(dflist)>0:   #1空2不空3不空
+                classic_dfs = pd.concat([classic_dfs2, classic_dfs3], ignore_index=True, sort=False)
+            else:   #1空2不空3空
+                classic_dfs = classic_dfs2
+    else:   #1不空
+        if (classic_dfs2.empty):  #1不空2空
+            if len(dflist)>0:   #1不空2空3不空
+                classic_dfs = pd.concat([classic_dfs1, classic_dfs3], ignore_index=True, sort=False)
+            else:   #1不空2空3空
+                classic_dfs = classic_dfs1
+        else:   #1不空2不空
+            if len(dflist)>0:   #1不空2不空3不空
+                classic_dfs = pd.concat([classic_dfs1,classic_dfs2, classic_dfs3], ignore_index=True, sort=False)
+            else:   #1不空2不空3空
+                classic_dfs = pd.concat([classic_dfs1,classic_dfs2], ignore_index=True, sort=False)
+
+    #classic_dfs = pd.concat([classic_dfs1,classic_dfs2], ignore_index=True, sort=False)
+    #return classic_dfs
 
 ###
 def get_New_coal(dfs):# 获取新煤种数据
