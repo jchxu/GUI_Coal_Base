@@ -72,16 +72,18 @@ class Import_Window(QtWidgets.QMainWindow,Ui_Import_Window):
             MainWindow.show()       #打开主窗口
             ImportWindow.close()    #关闭数据导入窗口
         else:
-            QMessageBox.warning(self, "缺少原始数据.csv文件!")
+            print('缺少原始数据csv文件,请先导入数据!')
+            QMessageBox.warning(self, "缺少原始数据", "缺少原始数据csv文件,请先导入数据!")
+            exit()
             #if os.path.exists('原始数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少年均数据.csv文件!")
             #elif os.path.exists('年均数据.csv'): QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件!")
             #else: QMessageBox.warning(self, "缺少数据文件", "缺少原始数据.csv文件和年均数据.csv文件!")
 
 ### 读取程序保存的数据文件
-class Read_CSVData():
-    if os.path.exists('原始数据.csv'):
-        file_origin = open('原始数据.csv')
-        df_origin = pd.read_csv(file_origin, encoding='utf-8')
+#class Read_CSVData():
+#    if os.path.exists('原始数据.csv'):
+#        file_origin = open('原始数据.csv')
+#        df_origin = pd.read_csv(file_origin, encoding='utf-8')
     #if os.path.exists('时间段分级数据.csv'):
     #    file_regionmean = open('时间段分级数据.csv')
     #    df_regionmean = pd.read_csv(file_regionmean, encoding='utf-8')
@@ -114,7 +116,13 @@ class Coal_Index_Window(QDialog):
     # 根据已选下拉列表筛选并显示数据
     def screening_btn_click(self):
         # 获取分品种分时间段煤种数据
-        df_origin = Read_CSVData.df_origin
+        if os.path.exists('原始数据.csv'):
+            file_origin = open('原始数据.csv')
+            df_origin = pd.read_csv(file_origin, encoding='utf-8')
+        else:
+            print('缺少原始数据csv文件,请先导入数据！')
+            exit()
+        #df_origin = Read_CSVData.df_origin
         df_yearregion = mean_by_yearregion(df_origin)
         df = init_level(df_yearregion)  # 5个指标分级
         #print(df)
@@ -165,7 +173,13 @@ class Base_Coal_Window(QDialog):
     # 根据已选下拉列表筛选并显示数据
     def screening_btn_click(self):
         # 获取基础煤种数据
-        df_origin = Read_CSVData.df_origin
+        if os.path.exists('原始数据.csv'):
+            file_origin = open('原始数据.csv')
+            df_origin = pd.read_csv(file_origin, encoding='utf-8')
+        else:
+            print('缺少原始数据csv文件,请先导入数据！')
+            exit()
+        #df_origin = Read_CSVData.df_origin
         base_dfs = get_Base_coal(df_origin)  # 获取基础煤种数据
         if (base_dfs == 'Empty'):
             self.child.label_num.setText('无基础煤种!')
@@ -218,7 +232,13 @@ class Classic_Coal_Window(QDialog):
     # 根据已选下拉列表筛选并显示数据
     def screening_btn_click(self):
         ## 获取经典煤种数据
-        df_origin = Read_CSVData.df_origin
+        if os.path.exists('原始数据.csv'):
+            file_origin = open('原始数据.csv')
+            df_origin = pd.read_csv(file_origin, encoding='utf-8')
+        else:
+            print('缺少原始数据csv文件,请先导入数据！')
+            exit()
+        #df_origin = Read_CSVData.df_origin
         yeardfs = mean_by_year(df_origin)
         yeardfs = init_level(yeardfs)
         allyearregiondfs = mean_by_yearregion(df_origin)
@@ -274,7 +294,13 @@ class New_Coal_Window(QDialog):
     # 根据已选下拉列表筛选并显示数据
     def screening_btn_click(self):
         ## 获取新煤种数据
-        df_origin = Read_CSVData.df_origin
+        if os.path.exists('原始数据.csv'):
+            file_origin = open('原始数据.csv')
+            df_origin = pd.read_csv(file_origin, encoding='utf-8')
+        else:
+            print('缺少原始数据csv文件,请先导入数据！')
+            exit()
+        #df_origin = Read_CSVData.df_origin
         new_dfs = get_New_coal(df_origin)  # 获取新煤种数据
         if (new_dfs == 'Empty'):
             self.child.label_num.setText('无新煤种!')
@@ -333,7 +359,13 @@ class Index_Trend_Window(QDialog):
 
     def screening_btn_click(self):
         # 获取分时间质量变化数据
-        df_origin = Read_CSVData.df_origin
+        if os.path.exists('原始数据.csv'):
+            file_origin = open('原始数据.csv')
+            df_origin = pd.read_csv(file_origin, encoding='utf-8')
+        else:
+            print('缺少原始数据csv文件,请先导入数据！')
+            exit()
+        #df_origin = Read_CSVData.df_origin
         df_3years = df_origin[df_origin.年份 >= 2016]
         if not (df_3years.empty):
             df_3years = mean_by_year(df_3years)
