@@ -181,8 +181,9 @@ class Base_Coal_Window(QDialog):
             exit()
         #df_origin = Read_CSVData.df_origin
         base_dfs = get_Base_coal(df_origin)  # 获取基础煤种数据
-        if (base_dfs == 'Empty'):
+        if (base_dfs.empty):
             self.child.label_num.setText('无基础煤种!')
+            QMessageBox.warning(self, "无基础煤种", "当前数据中未筛选出基础煤种数据!")
         else:
             base_dfs = mean_by_yearregion(base_dfs)
             df = init_level(base_dfs)  # 5个指标分级
@@ -244,8 +245,9 @@ class Classic_Coal_Window(QDialog):
         allyearregiondfs = mean_by_yearregion(df_origin)
         allyearregiondfs = init_level(allyearregiondfs)   #5个指标分级
         df = get_Classic_coal(yeardfs,allyearregiondfs)  # 获取经典煤种数据
-        if (df == 'Empty'):
+        if (df.empty):
             self.child.label_num.setText('无经典煤种!')
+            QMessageBox.warning(self, "无经典煤种", "当前数据中未筛选出经典煤种数据!")
         else:
             df.to_csv('经典煤种数据.csv', encoding='gb2312', index=0)
             # 根据下拉列表中的数值筛选数据
@@ -302,8 +304,9 @@ class New_Coal_Window(QDialog):
             exit()
         #df_origin = Read_CSVData.df_origin
         new_dfs = get_New_coal(df_origin)  # 获取新煤种数据
-        if (new_dfs == 'Empty'):
+        if (new_dfs.empty):
             self.child.label_num.setText('无新煤种!')
+            QMessageBox.warning(self, "无新煤种", "当前数据中未筛选出新煤种数据!")
         else:
             df = init_level(new_dfs)  # 5个指标分级
             df.to_csv('新煤种数据.csv', encoding='gb2312', index=0)
