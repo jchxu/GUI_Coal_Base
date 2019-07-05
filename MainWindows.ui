@@ -74,7 +74,7 @@
      </font>
     </property>
     <property name="text">
-     <string>经典煤种库</string>
+     <string>标杆煤种库</string>
     </property>
    </widget>
    <widget class="QPushButton" name="new_coal">

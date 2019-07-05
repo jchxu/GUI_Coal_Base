@@ -22,19 +22,22 @@ def read_data(self,datafiles):     #GUI程序用
     for i in range(len(datafiles)):
         datafile = datafiles[i]
         if (datafile.split('.')[-1] == 'xls') or (datafile.split('.')[-1] == 'xlsx'):
-            #print('读取Excel文件:', datafile)                         #测试程序用
+            print('读取Excel文件:', datafile)                         #测试程序用
             self.textEdit.append('读取Excel数据文件:%s' % datafile)   #GUI程序用
             df = pd.read_excel(datafile)
+            print(df)
             dflist.append(df)
         elif (datafile.split('.')[-1] == 'csv'):
-            #print('读取CSV文件:', datafile)                       #测试程序用
+            print('读取CSV文件:', datafile)                       #测试程序用
             self.textEdit.append('读取CSV数据文件:%s' % datafile) #GUI程序用
             file = open(datafile)
             df = pd.read_csv(file)
             dflist.append(df)
             file.close()
-    dfs = pd.concat(dflist, ignore_index=True, sort=False)
-    return dfs
+    if len(dflist)>0:
+        dfs = pd.concat(dflist, ignore_index=True, sort=False)
+        #print(dfs)
+        return dfs
 
 ### 判断字符是否为数字，若为数字，则保留一位小数返回
 def numformat(itemvalue):
@@ -108,7 +111,7 @@ def get_Base_coal(dfs):
 
 ### 获取经典煤种数据
 #def get_Classic_coal(self, dfs, yeardfs, alldfs):
-def get_Classic_coal(yeardfs, alldfs):
+def get_Classic_coal(yeardfs):
     #1999-2002年间使用的煤种
     classic_dfs1= yeardfs[(yeardfs.年份 >= 1999) & (yeardfs.年份 <= 2002)]
     if not (classic_dfs1.empty):
@@ -122,7 +125,7 @@ def get_Classic_coal(yeardfs, alldfs):
         classic_dfs2 = pd.concat([classic_dfs2, pd.DataFrame(columns=['入选原因'])], sort=False)
         if len(classic_dfs2) > 0:
             for index, row in classic_dfs2.iterrows():
-                classic_dfs2.loc[index, '入选原因'] = '年均煤质分级为特等的煤种'
+                classic_dfs2.loc[index, '入选原因'] = '年均煤质分级为特等'
     #分煤种、分时间段主要指标排名前3的煤种
     dflist = []
     kinds = ['焦煤','肥煤','1/3焦煤','气煤','瘦煤']

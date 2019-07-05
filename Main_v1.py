@@ -242,9 +242,9 @@ class Classic_Coal_Window(QDialog):
         #df_origin = Read_CSVData.df_origin
         yeardfs = mean_by_year(df_origin)
         yeardfs = init_level(yeardfs)
-        allyearregiondfs = mean_by_yearregion(df_origin)
-        allyearregiondfs = init_level(allyearregiondfs)   #5个指标分级
-        df = get_Classic_coal(yeardfs,allyearregiondfs)  # 获取经典煤种数据
+        #allyearregiondfs = mean_by_yearregion(df_origin)
+        #allyearregiondfs = init_level(allyearregiondfs)   #5个指标分级
+        df = get_Classic_coal(yeardfs)  # 获取经典煤种数据
         if (df.empty):
             self.child.label_num.setText('无经典煤种!')
             QMessageBox.warning(self, "无经典煤种", "当前数据中未筛选出经典煤种数据!")

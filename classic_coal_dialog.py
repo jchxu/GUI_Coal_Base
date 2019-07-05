@@ -219,7 +219,7 @@ class Ui_classic_coal_dialog(object):
 
     def retranslateUi(self, classic_coal_dialog):
         _translate = QtCore.QCoreApplication.translate
-        classic_coal_dialog.setWindowTitle(_translate("classic_coal_dialog", "经典煤种库"))
+        classic_coal_dialog.setWindowTitle(_translate("classic_coal_dialog", "标杆煤种库"))
         self.comboBox_3.setItemText(0, _translate("classic_coal_dialog", "所有"))
         self.comboBox_3.setItemText(1, _translate("classic_coal_dialog", "1985-1990"))
         self.comboBox_3.setItemText(2, _translate("classic_coal_dialog", "1991-1995"))
@@ -253,7 +253,7 @@ class Ui_classic_coal_dialog(object):
         self.comboBox_7.setItemText(3, _translate("classic_coal_dialog", "中"))
         self.comboBox_7.setItemText(4, _translate("classic_coal_dialog", "低"))
         self.comboBox_7.setItemText(5, _translate("classic_coal_dialog", "特低"))
-        self.label.setText(_translate("classic_coal_dialog", "经典煤种筛选条件"))
+        self.label.setText(_translate("classic_coal_dialog", "标杆煤种筛选条件"))
         self.label_9.setText(_translate("classic_coal_dialog", "硫分"))
         self.comboBox_5.setItemText(0, _translate("classic_coal_dialog", "所有"))
         self.comboBox_5.setItemText(1, _translate("classic_coal_dialog", "硬煤"))
