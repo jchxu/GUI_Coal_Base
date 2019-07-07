@@ -25,7 +25,6 @@ def read_data(self,datafiles):     #GUI程序用
             print('读取Excel文件:', datafile)                         #测试程序用
             self.textEdit.append('读取Excel数据文件:%s' % datafile)   #GUI程序用
             df = pd.read_excel(datafile)
-            print(df)
             dflist.append(df)
         elif (datafile.split('.')[-1] == 'csv'):
             print('读取CSV文件:', datafile)                       #测试程序用
@@ -213,8 +212,8 @@ def get_Classic_coal(yeardfs):
     #print(classic_dfs)
     return classic_dfs
 
-###
-def get_New_coal(dfs):# 获取新煤种数据
+### 获取新煤种数据
+def get_New_coal(dfs):
     new_dfs1 = dfs[(dfs.备注.notna())] # & ((dfs.备注 == '新') | (dfs.备注 == 'new'))]
     if (new_dfs1.empty):
         new_dfs = pd.DataFrame(columns=['A'])
@@ -223,6 +222,32 @@ def get_New_coal(dfs):# 获取新煤种数据
         if (new_dfs.empty):
             new_dfs = pd.DataFrame(columns=['A'])
     return new_dfs
+
+### 获取煤种趋势数据
+def get_Trend_coal(base_dfs):
+    trend_df = pd.DataFrame
+    # （1）2016年以来按年均
+    df_3years = base_dfs[(base_dfs.年份 >= 2016)]
+    if (df_3years.empty):
+        df_3years = pd.DataFrame(columns=['A'])
+    else:
+        df_3years = mean_by_year(df_3years)
+    # （2）2016年前按时间段
+    df_yearregion = base_dfs[base_dfs.年份 < 2016]
+    if (df_yearregion.empty):
+        df_yearregion = pd.DataFrame(columns=['A'])
+    else:
+        df_yearregion = mean_by_yearregion(df_yearregion)
+    # （1）（2）合并
+    if (df_3years.empty) and (df_yearregion.empty):
+        trend_df = pd.DataFrame(columns=['A'])
+    elif (df_3years.empty):
+        trend_df = df_yearregion
+    elif (df_yearregion.empty):
+        trend_df = df_3years
+    else:
+        trend_df = pd.concat([df_yearregion,df_3years], ignore_index=True, sort=False)
+    return trend_df
 
 ### 根据煤种和硫分数据，判断硫分分级
 def get_S_level(coal_kind,coal_Std):
@@ -572,6 +597,18 @@ def mean_by_year(dfs):          #测试程序用
     #print('已根据年份对各煤种进行指标数据平均')  # 测试程序用
     #self.textEdit.append('已根据年份对各煤种进行指标数据平均')   #GUI程序用
     return dfs_mean_year
+
+### 根据煤种对数据做平均
+def mean_by_kind(trend_df):
+    trend_kind = pd.DataFrame
+    kinds = list(set(trend_df.煤种.tolist()))
+    for item in kinds:
+        tempdf = trend_df[trend_df.煤种 == item]
+        del tempdf['煤名称']
+        tempdf = tempdf.groupby(tempdf['年份']).mean()
+        print(tempdf)
+
+    return trend_kind
 
 ### 根据数据对煤质、热强度、硬煤分类、灰分、硫分进行分级，并插入各自数据中
 #def init_level(self,dfs):  #GUI程序用

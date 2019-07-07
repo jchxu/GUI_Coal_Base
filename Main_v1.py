@@ -286,7 +286,6 @@ class Classic_Coal_Window(QDialog):
             self.child.result_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)  #选中一行
             self.child.result_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents) #自适应调整列宽
 
-
 ### 新煤种指标数据窗口 ###
 class New_Coal_Window(QDialog):
     def __init__(self):
@@ -368,49 +367,61 @@ class Index_Trend_Window(QDialog):
         else:
             print('缺少原始数据csv文件,请先导入数据！')
             exit()
-        #df_origin = Read_CSVData.df_origin
-        df_3years = df_origin[df_origin.年份 >= 2016]
-        if not (df_3years.empty):
-            df_3years = mean_by_year(df_3years)
-        df_yearregion = df_origin[df_origin.年份 <2016]
-        if not (df_yearregion.empty):
-            df_yearregion = mean_by_yearregion(df_yearregion)
-        if (not (df_3years.empty)) and (not (df_yearregion.empty)):
-            df = pd.concat([df_yearregion,df_3years],ignore_index=True,sort=False)
-        elif (df_3years.empty) and (df_yearregion.empty):
-            print('无数据！')
-        elif (df_3years.empty):
-            df = df_yearregion
-        elif (df_yearregion.empty):
-            df = df_3years
-        if not (df.empty):
-            df.to_csv('质量变化趋势.csv', encoding='gb2312', index=0)
+        base_dfs = get_Base_coal(df_origin)
+        basekinds = list(set(base_dfs.煤种.tolist()))
+        if (base_dfs.empty):
+            print('无基础煤种!\n煤质指标质量变化趋势仅针对基础煤种.')
+            QMessageBox.warning(self, "无基础煤种", "当前数据中未筛选出基础煤种数据!\n煤质指标质量变化趋势仅针对基础煤种.")
+            trend_df = get_Trend_coal(base_dfs)
+            #exit()
+        else:
+            trend_df = get_Trend_coal(base_dfs)
+        if (trend_df.empty):
+            print('无煤质指标趋势数据!')
+            QMessageBox.warning(self, "无煤质指标趋势数据", "当前数据中未筛选出煤质指标趋势数据!")
+        else:
+            trend_df = mean_by_kind(trend_df)  #根据煤种平均数据
+            trend_df.to_csv('煤种质量变化趋势.csv', encoding='gb2312', index=0)
             # 根据下拉列表中的数值筛选数据
             coal_Kind = self.child.comboBox_2.currentText()
-            df = df[df.煤种 == coal_Kind]
-            xlocs = df.index.tolist()
-            xlabels = []
-            for item in df['年份'].tolist():
-                xlabels.append(str(item))
-            # 绘图
-            maincols = ['CRI', 'CSR', 'DI150_15','Y','G', 'TD', 'lgMF','Ad', 'Std', 'Vd', 'Pd', 'K2O_Na2O']
-            plt.rcParams['font.sans-serif'] = ['SimHei']
-            fig = plt.figure(figsize=(16,16))
-            fig.suptitle(coal_Kind+'各主要指标质量变化趋势')#, fontsize=18)
-            for i in range(len(maincols)):
-                specificY = df[df.年份 == '1999-2002'].loc[1,maincols[i]]
-                ax = plt.subplot(3, 4, i+1)     # 设置子图位置。总从3行，4列。从上往下，从左往右，第i+1个子图
-                ax.set_xlabel('时间段/年份')     # 设置X轴标题
-                ax.set_ylabel(maincols[i])      # 设置Y轴标题
-                plt.xticks(xlocs,xlabels,rotation=90)       # 设置X轴刻度文本
-                plt.plot(df.index,df[maincols[i]],linestyle='dashed', marker='o',label=maincols[i],zorder=1)
-                plt.scatter(1,specificY, label='1999-2002年间数据',s=100, marker='p', color='red',zorder=2)
-                ax.legend(loc='lower right')  # 设置图例，自动选择位置
-            plt.subplots_adjust(wspace=0.3, hspace=0.8)     # 调整子图间的间距
-            plt.show()
+            trendkinds = list(set(trend_df.煤种.tolist()))
+            if coal_Kind in trendkinds:
+                df = trend_df[trend_df.煤种 == coal_Kind]
+                xlocs = df.index.tolist()
+                xlabels = []
+                for item in df['年份'].tolist():
+                    if '.0' in str(item):
+                        xlabels.append(str(item).strip('.0'))
+                    else:
+                        xlabels.append(str(item))
+                # 绘图
+                maincols = ['CRI', 'CSR', 'DI150_15','Y','G', 'TD', 'lgMF','Ad', 'Std', 'Vd', 'Pd', 'K2O_Na2O']
+                plt.rcParams['font.sans-serif'] = ['SimHei']
+                fig = plt.figure(figsize=(16,16))
+                fig.suptitle(coal_Kind+'各主要指标质量变化趋势')#, fontsize=18)
+                for i in range(len(maincols)):
+                    ax = plt.subplot(3, 4, i+1)     # 设置子图位置。总从3行，4列。从上往下，从左往右，第i+1个子图
+                    ax.set_xlabel('时间段/年份')     # 设置X轴标题
+                    ax.set_ylabel(maincols[i])      # 设置Y轴标题
+                    plt.xticks(xlocs,xlabels,rotation=90)       # 设置X轴刻度文本
+                    plt.plot(df.index,df[maincols[i]],linestyle='dashed', marker='o',label=maincols[i],zorder=1)
+                    if '1999-2002' in xlabels:
+                        specific_df = (df[df.年份 == '1999-2002']).reset_index()
+                        yearindex = xlabels.index('1999-2002')
+                        specificY = specific_df.loc[0,maincols[i]]
+                        plt.scatter(yearindex, specificY, label='1999-2002年间数据', s=100, marker='p', color='red', zorder=2)
+                    ax.legend(loc='lower right')  # 设置图例，自动选择位置
+                plt.subplots_adjust(wspace=0.3, hspace=0.8)     # 调整子图间的间距
+                plt.show()
+            else:
+                if coal_Kind in basekinds:
+                    print('已筛选出%s的基础煤种数据，但无质量变化趋势数据！' % coal_Kind)
+                    QMessageBox.warning(self, "无煤质指标趋势数据", "已筛选出%s的基础煤种数据，但无质量变化趋势数据！" % coal_Kind )
+                else:
+                    print('未筛选出%s的基础煤种数据及质量变化趋势数据！' % coal_Kind)
+                    QMessageBox.warning(self, "无煤质指标趋势数据", "未筛选出%s的基础煤种数据及质量变化趋势数据！" % coal_Kind )
 
     ######## Slot functions #############
-
     #def slot_major(self):
     #    print()
     #    price=self.price_box.toPlainText()
