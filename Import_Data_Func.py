@@ -600,27 +600,27 @@ def mean_by_year(dfs):          #测试程序用
 
 ### 根据煤种对数据做平均
 def mean_by_kind(trend_df,maincols):
-    trend_kind = pd.DataFrame(columns=['煤种','年份'])
-    kinds = list(set(trend_df.煤种.tolist()))
     #maincols = ['CRI', 'CSR', 'DI150_15', 'Y', 'G', 'TD', 'lgMF', 'Ad', 'Std', 'Vd', 'Pd', 'K2O_Na2O']
+    trend_kind = pd.DataFrame(columns=['煤种','年份'])
     trend_kind = pd.concat([trend_kind,pd.DataFrame(columns=maincols)],ignore_index=True,sort=False)
-    print(trend_kind)
+    kinds = list(set(trend_df.煤种.tolist()))
     for item in kinds:
         tempdf = trend_df[trend_df.煤种 == item].reset_index(drop=True)
         del tempdf['煤名称']
         del tempdf['国家']
         del tempdf['产地']
         yearlist = list(set(tempdf.年份.tolist()))
-        print(yearlist)
         for year in yearlist:
+            test = {}
+            test['年份'] = numformat(str(year))
+            test['煤种'] = item
             tempdf1 = tempdf[tempdf.年份 == year]
-            print(year)
-            #print('-----------------------------')
-            print(tempdf1)
-            #for col in maincols:
-            #    print(col,": ",tempdf1[col].mean())
-
-
+            for col in maincols:
+                test[col] = tempdf1[col].mean()
+            new = pd.DataFrame([test])
+            trend_kind = trend_kind.append(new, ignore_index=True, sort=True)
+            #trend_kind = pd.concat([trend_kind,new],ignore_index=True,sort=False)
+    trend_kind = trend_kind.sort_values(by=['煤种','年份'], ascending=[True, True])
     return trend_kind
 
 ### 根据数据对煤质、热强度、硬煤分类、灰分、硫分进行分级，并插入各自数据中
