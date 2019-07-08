@@ -112,42 +112,53 @@ def get_Base_coal(dfs):
 #def get_Classic_coal(self, dfs, yeardfs, alldfs):
 def get_Classic_coal(yeardfs):
     #1999-2002年间使用的煤种
-    classic_dfs1= yeardfs[(yeardfs.年份 >= 1999) & (yeardfs.年份 <= 2002)]
-    if not (classic_dfs1.empty):
-        classic_dfs1 = pd.concat([classic_dfs1, pd.DataFrame(columns=['入选原因'])], sort=False)
-        for index,row in classic_dfs1.iterrows():
-            classic_dfs1.loc[index, '入选原因'] = '1999-2002年间使用的煤种'
+    classic_dfs1= yeardfs[(yeardfs.年份 >= 1999) & (yeardfs.年份 <= 2002)].reset_index(drop=True)
+    classic_dfs1 = pd.concat([classic_dfs1, pd.DataFrame(columns=['入选原因'])], sort=False)
+    for index, row in classic_dfs1.iterrows():
+        classic_dfs1.loc[index, '入选原因'] = '1999-2002年间使用的煤种'
    #煤质分级为特等的煤种
-    #classic_dfs2 = alldfs[(alldfs.煤质分级 == '特等') & (alldfs.年份 != '1999-2002')]
-    classic_dfs2 = yeardfs[(yeardfs.煤质分级 == '特等') & ((yeardfs.年份 < 1999) | (yeardfs.年份 > 2002))]
-    if not (classic_dfs2.empty):
-        classic_dfs2 = pd.concat([classic_dfs2, pd.DataFrame(columns=['入选原因'])], sort=False)
-        if len(classic_dfs2) > 0:
-            for index, row in classic_dfs2.iterrows():
-                classic_dfs2.loc[index, '入选原因'] = '年均煤质分级为特等'
+    classic_dfs2 = yeardfs[(yeardfs.煤质分级 == '特等') & ((yeardfs.年份 < 1999) | (yeardfs.年份 > 2002))].reset_index(drop=True)
+    classic_dfs2 = pd.concat([classic_dfs2, pd.DataFrame(columns=['入选原因'])], sort=False)
+    for index, row in classic_dfs2.iterrows():
+        classic_dfs2.loc[index, '入选原因'] = '年均煤质分级为特等'
     #分煤种、分时间段主要指标排名前3的煤种
     dflist = []
-    kinds = ['焦煤','肥煤','1/3焦煤','气煤','瘦煤']
+    #kinds = ['焦煤','肥煤','1/3焦煤','气煤','瘦煤']
+    kinds = list(set(yeardfs.煤种.tolist()))
+    # 定义不同煤质指标的大小顺序(越大越好or越小越好)
     maincols = ['CRI', 'CSR', 'DI150_15','Y','G', 'TD', 'lgMF','Ad', 'Std', 'Vd', 'Pd', 'K2O_Na2O']
     colorder = {}
     for item in ['CSR','DI150_15','Y','G','TD','lgMF']:
         colorder[item] = False
     for item in ['CRI','Ad','Std','Vd','Pd','K2O_Na2O']:
         colorder[item] = True
-    # 1985-2005期间，年均指标排名前3
     for kind in kinds:
-        classic_dfs31 = yeardfs[(yeardfs.煤种 == kind) & (yeardfs.年份 >= 1999) & (yeardfs.年份 <= 2005)]
-        if not (classic_dfs31.empty):
-            for col in maincols:
-                df = classic_dfs31.sort_values(ascending = colorder[col],by=col)
-                df = pd.concat([df, pd.DataFrame(columns=['入选原因'])], sort=False)
-                if len(df) > 0:
-                    for index, row in df.iterrows():
-                        df.loc[index, '入选原因'] = '1985-2005间'+kind+'年均'+col+'前三'
-                if len(df) > 3:
-                    dflist.append(df[0:3])
-                else:
-                    dflist.append(df)
+        # 1985-2005期间，年均指标排名前3
+        classic_dfs31 = yeardfs[(yeardfs.煤种 == kind) & (yeardfs.年份 >= 1985) & (yeardfs.年份 <= 2005)].reset_index(drop=True)
+        for col in maincols:
+            df = classic_dfs31.sort_values(ascending = colorder[col],by=col).reset_index(drop=True)
+            indexs = []
+            tempname = []
+            for i in range(len(df)):
+                if len(tempname) < 3:
+                    if (not (df.loc[i,'煤名称'] in tempname)):
+                        tempname.append(df.loc[i,'煤名称'])
+                        indexs.append(i)
+                elif len(tempname) == 3:
+                    break
+            print(col,indexs)
+
+
+
+            df = pd.concat([df, pd.DataFrame(columns=['入选原因'])], sort=False)
+            for index, row in df.iterrows():
+                 df.loc[index, '入选原因'] = '1985-2005间'+kind+'年均'+col+'前三'
+
+            if len(df) > 3:
+                dflist.append(df[0:3])
+            else:
+                dflist.append(df)
+        # 2006-2018期间，年均指标排名前3
         classic_dfs32 = yeardfs[(yeardfs.煤种 == kind) & (yeardfs.年份 >= 2006) & (yeardfs.年份 <= 2018)]
         if not (classic_dfs32.empty):
             for col in maincols:
@@ -160,6 +171,7 @@ def get_Classic_coal(yeardfs):
                     dflist.append(df[0:3])
                 else:
                     dflist.append(df)
+        # 2019以来，年均指标排名前3
         classic_dfs33 = yeardfs[(yeardfs.煤种 == kind) & (yeardfs.年份 >= 2019)]
         if not (classic_dfs33.empty):
             for col in maincols:
