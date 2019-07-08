@@ -105,7 +105,7 @@ class Ui_Import_Window(object):
         self.retranslateUi(Import_Window)
         self.Open_Main.clicked.connect(Import_Window.openmain)
         self.find_files_btn1.clicked.connect(Import_Window.find_files)
-        #self.find_files_btn2.clicked.connect(Import_Window.find_files)
+        self.find_files_btn2.clicked.connect(Import_Window.append_load_files)
         self.quit_btn.clicked.connect(Import_Window.close)
         QtCore.QMetaObject.connectSlotsByName(Import_Window)
         Import_Window.setTabOrder(self.find_files_btn1, self.textEdit)

@@ -491,7 +491,7 @@ def mean_by_yearregion(dfs):          #测试程序用
     year_range = ['1985-1990','1991-1995','1996-1998','1999-2002','2003-2005','2006-2010','2011-2015','2016至今']
     cols = dfs.columns.tolist()
     dfs_mean_yearrange = pd.DataFrame(columns=cols)
-    for item in ['序号', '煤种', '煤名称', '年份', '国家', '产地']:
+    for item in ['煤种', '煤名称', '年份', '国家', '产地']:
         if item in cols:
             cols.remove(item)
     for i in range(len(year_range)):
@@ -541,7 +541,7 @@ def mean_by_yearregion(dfs):          #测试程序用
             initnum = len(dfs_mean_yearrange.index)
             for nameindex in range(len(names)):
                 for col in cols:
-                    dfs_mean_yearrange.loc[initnum+nameindex, '序号'] = initnum+nameindex+1
+                    #dfs_mean_yearrange.loc[initnum+nameindex, '序号'] = initnum+nameindex+1
                     dfs_mean_yearrange.loc[initnum+nameindex, '煤种'] = coal_kind[names[nameindex]]
                     dfs_mean_yearrange.loc[initnum+nameindex, '煤名称'] = names[nameindex]
                     dfs_mean_yearrange.loc[initnum+nameindex, '年份'] = year_range[i]
@@ -566,7 +566,7 @@ def mean_by_yearregion(dfs):          #测试程序用
 def mean_by_year(dfs):          #测试程序用
     cols = dfs.columns.tolist()
     dfs_mean_year = pd.DataFrame(columns=cols)
-    for item in ['序号', '煤种', '煤名称', '年份', '国家', '产地']:
+    for item in ['煤种', '煤名称', '年份', '国家', '产地']:
         if item in cols:
             cols.remove(item)
     years = list(set(dfs['年份'].tolist()))
@@ -586,7 +586,7 @@ def mean_by_year(dfs):          #测试程序用
         initnum = len(dfs_mean_year.index)
         for nameindex in range(len(names)):
             for col in cols:
-                dfs_mean_year.loc[initnum+nameindex, '序号'] = initnum+nameindex+1
+                #dfs_mean_year.loc[initnum+nameindex, '序号'] = initnum+nameindex+1
                 dfs_mean_year.loc[initnum+nameindex, '煤种'] = coal_kind[names[nameindex]]
                 dfs_mean_year.loc[initnum+nameindex, '煤名称'] = names[nameindex]
                 dfs_mean_year.loc[initnum+nameindex, '年份'] = years[i]
@@ -605,7 +605,8 @@ def mean_by_kind(trend_df):
     for item in kinds:
         tempdf = trend_df[trend_df.煤种 == item]
         del tempdf['煤名称']
-        tempdf = tempdf.groupby(tempdf['年份']).mean()
+        print(tempdf)
+        tempdf = tempdf.groupby('年份')#.mean()
         print(tempdf)
 
     return trend_kind
