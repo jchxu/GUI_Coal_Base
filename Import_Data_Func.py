@@ -599,15 +599,27 @@ def mean_by_year(dfs):          #测试程序用
     return dfs_mean_year
 
 ### 根据煤种对数据做平均
-def mean_by_kind(trend_df):
-    trend_kind = pd.DataFrame
+def mean_by_kind(trend_df,maincols):
+    trend_kind = pd.DataFrame(columns=['煤种','年份'])
     kinds = list(set(trend_df.煤种.tolist()))
+    #maincols = ['CRI', 'CSR', 'DI150_15', 'Y', 'G', 'TD', 'lgMF', 'Ad', 'Std', 'Vd', 'Pd', 'K2O_Na2O']
+    trend_kind = pd.concat([trend_kind,pd.DataFrame(columns=maincols)],ignore_index=True,sort=False)
+    print(trend_kind)
     for item in kinds:
-        tempdf = trend_df[trend_df.煤种 == item]
+        tempdf = trend_df[trend_df.煤种 == item].reset_index(drop=True)
         del tempdf['煤名称']
-        print(tempdf)
-        tempdf = tempdf.groupby('年份')#.mean()
-        print(tempdf)
+        del tempdf['国家']
+        del tempdf['产地']
+        yearlist = list(set(tempdf.年份.tolist()))
+        print(yearlist)
+        for year in yearlist:
+            tempdf1 = tempdf[tempdf.年份 == year]
+            print(year)
+            #print('-----------------------------')
+            print(tempdf1)
+            #for col in maincols:
+            #    print(col,": ",tempdf1[col].mean())
+
 
     return trend_kind
 
