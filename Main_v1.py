@@ -112,7 +112,7 @@ class Coal_Index_Window(QDialog):
         df_yearregion = mean_by_yearregion(df_origin)
         df = init_level(df_yearregion)  # 5个指标分级
         #print(df)
-        df.to_csv('时间段分级数据.csv', encoding='gb2312', index=0)
+        df.to_csv('分品种分级数据.csv', encoding='gb2312', index=0)
         #coal_Place = self.child.comboBox_1.currentText()
         coal_Kind = self.child.comboBox_2.currentText()
         coal_Year = self.child.comboBox_3.currentText()
@@ -180,7 +180,7 @@ class Base_Coal_Window(QDialog):
         else:
             base_dfs = mean_by_yearregion(base_dfs)
             df = init_level(base_dfs)  # 5个指标分级
-            df.to_csv('基础煤种时间段分级数据.csv', encoding='gb2312', index=0)
+            df.to_csv('基础煤种分级数据.csv', encoding='gb2312', index=0)
             # 根据下拉列表中的数值筛选数据
             #coal_Place = self.child.comboBox_1.currentText()
             coal_Kind = self.child.comboBox_2.currentText()
@@ -250,7 +250,7 @@ class Classic_Coal_Window(QDialog):
             self.child.label_num.setText('无标杆煤种!')
             QMessageBox.warning(self, "无标杆煤种", "当前数据中未筛选出标杆煤种数据!")
         else:
-            df.to_csv('标杆煤种数据.csv', encoding='gb2312', index=0)
+            df.to_csv('标杆煤种分级数据.csv', encoding='gb2312', index=0)
             # 根据下拉列表中的数值筛选数据
             #coal_Place = self.child.comboBox_1.currentText()
             coal_Kind = self.child.comboBox_2.currentText()
@@ -317,7 +317,7 @@ class New_Coal_Window(QDialog):
             QMessageBox.warning(self, "无新煤种", "当前数据中未筛选出新煤种数据!")
         else:
             df = init_level(new_dfs)  # 5个指标分级
-            df.to_csv('新煤种数据.csv', encoding='gb2312', index=0)
+            df.to_csv('新煤种原始数据.csv', encoding='gb2312', index=0)
             #coal_Place = self.child.comboBox_1.currentText()
             coal_Kind = self.child.comboBox_2.currentText()
             coal_Year = self.child.comboBox_3.currentText()
@@ -397,7 +397,7 @@ class Index_Trend_Window(QDialog):
             QMessageBox.warning(self, "无煤质指标趋势数据", "当前数据中未筛选出煤质指标趋势数据!")
         else:
             trend_df = mean_by_kind(trend_df,maincols)  #根据煤种平均煤质指标数据
-            trend_df.to_csv('煤种质量变化趋势.csv', encoding='gb2312', index=0)
+            trend_df.to_csv('煤种质量变化趋势数据.csv', encoding='gb2312', index=0)
             # 根据下拉列表中的数值筛选数据
             coal_Kind = self.child.comboBox_2.currentText()
             trendkinds = list(set(trend_df.煤种.tolist()))
