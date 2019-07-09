@@ -154,7 +154,7 @@ class Coal_Index_Window(QDialog):
             QMessageBox.information(self, "已筛选出分品种数据", "已筛选出%d条分品种煤质指标数据." % len(df))
         else:
             QMessageBox.warning(self, "未筛选出分品种数据", "未筛选出分品种煤质指标数据.")
-        print('筛选得到%d条数据.' % len(df))
+        print('筛选得到%d条分品种煤质指标数据.' % len(df))
 
 ### 基础煤种指标数据窗口 ###
 class Base_Coal_Window(QDialog):
@@ -292,7 +292,6 @@ class Classic_Coal_Window(QDialog):
             else:
                 QMessageBox.warning(self, "未筛选出标杆煤种数据", "未筛选出标杆煤种数据.")
             print('筛选得到%d条标杆煤种数据.' % len(df))
-
 
 ### 新煤种指标数据窗口 ###
 class New_Coal_Window(QDialog):

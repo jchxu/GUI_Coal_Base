@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 import sys,re
-pd.set_option('display.max_columns', None)
+#pd.set_option('display.max_columns', None)
 ### 进度条相关
 def report_progress(progress, total):
     ratio = progress / float(total)
@@ -122,9 +122,6 @@ def get_Classic_coal(yeardfs):
     for index, row in classic_dfs2.iterrows():
         classic_dfs2.loc[index, '入选原因'] = '年均煤质分级为特等'
     #分煤种、分时间段主要指标排名前3的煤种
-    dflist = []
-    #kinds = ['焦煤','肥煤','1/3焦煤','气煤','瘦煤']
-    kinds = list(set(yeardfs.煤种.tolist()))
     # 定义不同煤质指标的大小顺序(越大越好or越小越好)
     maincols = ['CRI', 'CSR', 'DI150_15','Y','G', 'TD', 'lgMF','Ad', 'Std', 'Vd', 'Pd', 'K2O_Na2O']
     colorder = {}
@@ -132,13 +129,15 @@ def get_Classic_coal(yeardfs):
         colorder[item] = False
     for item in ['CRI','Ad','Std','Vd','Pd','K2O_Na2O']:
         colorder[item] = True
+    dflist = []
+    kinds = list(set(yeardfs.煤种.tolist()))
+    classic_dfs3 = pd.DataFrame(columns=['入选原因'])
     for kind in kinds:
         # 1985-2005期间，年均指标排名前3
         classic_dfs31 = yeardfs[(yeardfs.煤种 == kind) & (yeardfs.年份 >= 1985) & (yeardfs.年份 <= 2005)].reset_index(drop=True)
         for col in maincols:
             df = classic_dfs31.sort_values(ascending = colorder[col],by=col).reset_index(drop=True)
-            indexs = []
-            tempname = []
+            indexs,tempname,coldflist = [],[],[]
             for i in range(len(df)):
                 if len(tempname) < 3:
                     if (not (df.loc[i,'煤名称'] in tempname)):
@@ -146,82 +145,77 @@ def get_Classic_coal(yeardfs):
                         indexs.append(i)
                 elif len(tempname) == 3:
                     break
-            print(col,indexs)
-
-
-
-            df = pd.concat([df, pd.DataFrame(columns=['入选原因'])], sort=False)
-            for index, row in df.iterrows():
-                 df.loc[index, '入选原因'] = '1985-2005间'+kind+'年均'+col+'前三'
-
-            if len(df) > 3:
-                dflist.append(df[0:3])
-            else:
-                dflist.append(df)
+            for ii in indexs:
+                coldflist.append(df.loc[ii])
+            coldf = pd.DataFrame(coldflist)
+            coldf = pd.concat([coldf, pd.DataFrame(columns=['入选原因'])], sort=False).reset_index(drop=True)
+            for index, row in coldf.iterrows():
+                coldf.loc[index, '入选原因'] = '1985-2005'+kind+'年均'+col+'前%d' % len(indexs)
+            classic_dfs3 = classic_dfs3.append(coldf,ignore_index=True,sort=False).reset_index(drop=True)
+        #print(classic_dfs310)
         # 2006-2018期间，年均指标排名前3
-        classic_dfs32 = yeardfs[(yeardfs.煤种 == kind) & (yeardfs.年份 >= 2006) & (yeardfs.年份 <= 2018)]
-        if not (classic_dfs32.empty):
-            for col in maincols:
-                df = classic_dfs32.sort_values(ascending=colorder[col], by=col)
-                df = pd.concat([df, pd.DataFrame(columns=['入选原因'])], sort=False)
-                if len(df) > 0:
-                    for index, row in df.iterrows():
-                        df.loc[index, '入选原因'] = '2006-2018间'+kind+'年均'+col+'前三'
-                if len(df) > 3:
-                    dflist.append(df[0:3])
-                else:
-                    dflist.append(df)
+        classic_dfs32 = yeardfs[(yeardfs.煤种 == kind) & (yeardfs.年份 >= 2006) & (yeardfs.年份 <= 2018)].reset_index(drop=True)
+        for col in maincols:
+            df = classic_dfs32.sort_values(ascending = colorder[col],by=col).reset_index(drop=True)
+            indexs,tempname,coldflist = [],[],[]
+            for i in range(len(df)):
+                if len(tempname) < 3:
+                    if (not (df.loc[i,'煤名称'] in tempname)):
+                        tempname.append(df.loc[i,'煤名称'])
+                        indexs.append(i)
+                elif len(tempname) == 3:
+                    break
+            for ii in indexs:
+                coldflist.append(df.loc[ii])
+            coldf = pd.DataFrame(coldflist)
+            coldf = pd.concat([coldf, pd.DataFrame(columns=['入选原因'])], sort=False).reset_index(drop=True)
+            for index, row in coldf.iterrows():
+                coldf.loc[index, '入选原因'] = '2006-2018'+kind+'年均'+col+'前%d' % len(indexs)
+            classic_dfs3 = classic_dfs3.append(coldf,ignore_index=True,sort=False).reset_index(drop=True)
+        # 获取2019年前各指标最差值
+        min_df12 = classic_dfs3[(classic_dfs3.煤种 == kind)]
+        colmin = {}
+        for col in maincols:
+            if colorder[col] == False:      #该指标数值越大越好
+                colmin[col] = min_df12[col].min()
+            elif colorder[col] == True:     #该指标数值越小越好
+                colmin[col] = min_df12[col].max()
         # 2019以来，年均指标排名前3
-        classic_dfs33 = yeardfs[(yeardfs.煤种 == kind) & (yeardfs.年份 >= 2019)]
-        if not (classic_dfs33.empty):
-            for col in maincols:
-                df = classic_dfs33.sort_values(ascending=colorder[col], by=col)
-                df = pd.concat([df, pd.DataFrame(columns=['入选原因'])], sort=False)
-                if not (kind == '瘦煤'):
-                    if len(df) > 0:
-                        for index, row in df.iterrows():
-                            df.loc[index, '入选原因'] = '2019'+kind+'年均'+col+'前三'
-                    if len(df) > 3:
-                        dflist.append(df[0:3])
+        classic_dfs33 = yeardfs[(yeardfs.煤种 == kind) & (yeardfs.年份 >= 2019)].reset_index(drop=True)
+        for col in maincols:
+            df = classic_dfs33.sort_values(ascending = colorder[col],by=col).reset_index(drop=True)
+            indexs,tempname,coldflist = [],[],[]
+            for i in range(len(df)):
+                if colorder[col] == False:  # 该指标数值越大越好
+                    if df.loc[i,col] >= colmin[col]:
+                        if len(tempname) < 3:
+                            if not ('瘦煤' in tempname):
+                                if (not (df.loc[i, '煤名称'] in tempname)):
+                                    tempname.append(df.loc[i, '煤名称'])
+                                    indexs.append(i)
+                        elif len(tempname) == 3:
+                            break
                     else:
-                        dflist.append(df)
-                else:
-                    if len(df) > 0:
-                        for index, row in df.iterrows():
-                            df.loc[index, '入选原因'] = '2019'+kind+'年均'+col+'第一'
-                    dflist.append(df[0])
-    if len(dflist)>0:
-        classic_dfs3 = pd.concat(dflist, ignore_index=True,sort=False)
-    #判断3个条件是否全为空
-    if (classic_dfs1.empty):    #1空
-        if (classic_dfs2.empty):  #1空2空
-            if (classic_dfs3.empty):   #1空2空3空
-                classic_dfs = pd.DataFrame(columns=['A'])
-            else:   #1空2空3不空
-                classic_dfs = classic_dfs3
-        else:   #1空2不空
-            if (classic_dfs3.empty):   #1空2不空3空
-                classic_dfs = classic_dfs2
-                #return classic_dfs
-            else:   #1空2不空3不空
-                classic_dfs = pd.concat([classic_dfs2, classic_dfs3], ignore_index=True, sort=False)
-                #return classic_dfs
-    else:   #1不空
-        if (classic_dfs2.empty):  #1不空2空
-            if (classic_dfs3.empty):    #1不空2空3空
-                classic_dfs = classic_dfs1
-                #return classic_dfs
-            else:   #1不空2空3不空
-                classic_dfs = pd.concat([classic_dfs1, classic_dfs3], ignore_index=True, sort=False)
-                #return classic_dfs
-        else:   #1不空2不空
-            if (classic_dfs3.empty):   #1不空2不空3不空
-                classic_dfs = pd.concat([classic_dfs1, classic_dfs2], ignore_index=True, sort=False)
-                #return classic_dfs
-            else:   #1不空2不空3空
-                classic_dfs = pd.concat([classic_dfs1,classic_dfs2, classic_dfs3], ignore_index=True, sort=False)
-                #return classic_dfs
-    #print(classic_dfs)
+                        break
+                elif colorder[col] == True:  # 该指标数值越小越好
+                    if df.loc[i,col] <= colmin[col]:
+                        if len(tempname) < 3:
+                            if not ('瘦煤' in tempname):
+                                if (not (df.loc[i, '煤名称'] in tempname)):
+                                    tempname.append(df.loc[i, '煤名称'])
+                                    indexs.append(i)
+                        elif len(tempname) == 3:
+                            break
+                    else:
+                        break
+            for ii in indexs:
+                coldflist.append(df.loc[ii])
+            coldf = pd.DataFrame(coldflist)
+            coldf = pd.concat([coldf, pd.DataFrame(columns=['入选原因'])], sort=False).reset_index(drop=True)
+            for index, row in coldf.iterrows():
+                coldf.loc[index, '入选原因'] = '2019以来'+kind+'年均'+col+'前%d' % len(indexs)
+            classic_dfs3 = classic_dfs3.append(coldf,ignore_index=True,sort=False).reset_index(drop=True)
+    classic_dfs = pd.concat([classic_dfs1,classic_dfs2,classic_dfs3],ignore_index=True,sort=False).reset_index(drop=True)
     return classic_dfs
 
 ### 获取新煤种数据
